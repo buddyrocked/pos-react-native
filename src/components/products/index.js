@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, View, Text } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class Products extends Component {
   constructor(props){
@@ -38,7 +39,7 @@ export default class Products extends Component {
     }
 
     return(
-      <View style={{ flex: 1 }}>
+      <View style={ styles.listContainer }>
         <FlatList
           data={ this.state.dataSource }
           renderItem={ ({item}) =>
@@ -48,18 +49,25 @@ export default class Products extends Component {
 
                 </View>
                 <View style={ styles.itemInfo }>
-                  <Text style={{ fontWeight : 'bold' }}>{ item.sku }</Text>
-                  <Text>{ item.name }</Text>
+                  <Text style={ styles.itemInfoCode }>{ item.sku } - { item.type_name }</Text>
+                  <Text style={ styles.itemInfoName }>{ item.name }</Text>
                 </View>
                 <View style={ styles.itemAction }>
-                  <Button
-                    title="Detail"
-                    color="#ff5c63"
+                  <TouchableOpacity
+                    style={{ flex : 1 }}
+                    accessible={ true }
+                    accessibilityLabel={ 'Tap Me' }
                     onPress={ ()=> this.props.navigation.navigate('ProductModal', {
                       id : item.id,
                       title : item.name
-                    })}
-                  />
+                    })}>
+                    <View style={ styles.itemIcon }>
+                      <MaterialCommunityIcons
+                        name="cart-plus"
+                        size={30}
+                        color="#ff5c63" />
+                    </View>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -72,15 +80,34 @@ export default class Products extends Component {
 }
 
 const styles = StyleSheet.create({
+  itemIcon : {
+    justifyContent : 'center',
+    alignItems : 'center',
+    flex : 1
+  },
+  listContainer : {
+    flex : 1,
+    margin : 5
+  },
   itemContainer : {
-    padding : 10, backgroundColor : 'white', marginTop : 10
+    padding : 15, backgroundColor : 'white', marginBottom : -1, borderColor : '#e0e0e0', borderWidth : 1
   },
   itemImage : {
     flex : 1,
-    
+    backgroundColor: '#f0f0f0',
+    height : 60
   },
   itemInfo : {
     flex : 3,
+    paddingLeft : 10,
+    paddingRight : 10,
+  },
+  itemInfoCode : {
+    color : '#666',
+    fontWeight : 'bold'
+  },
+  itemInfoName : {
+    color : '#333'
   },
   itemAction : {
     flex : 1,
