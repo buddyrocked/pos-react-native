@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, View, Text } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, View, StyleSheet, Text } from 'react-native';
 
 export default class Product extends Component {
   constructor(props){
@@ -48,16 +48,45 @@ export default class Product extends Component {
     }
 
     return(
-      <View style={{ flex: 1, alignItems : 'center', justifyContent : 'center'}}>
-        <Text style={{ fontWeight : 'bold' }}>Product Detail</Text>
-        <Text style={{ fontWeight : 'bold' }}>{ this.state.productDetail.name }</Text>
-        <Text style={{ fontWeight : 'bold' }}>{ this.state.productDetail.sku }</Text>
-        <Button
-          title="Go back"
-          color="#ff5c63"
-          onPress={() => this.props.navigation.goBack()}
-        />
+      <View style={ styles.productContainer }>
+        <View style={ styles.productImage }>
+
+        </View>
+        <View style={ styles.productInfo }>
+          <Text style={ styles.productInfoText }>Product Detail</Text>
+          <Text style={ styles.productInfoText }>{ this.state.productDetail.name }</Text>
+          <Text style={ styles.productInfoText }>{ this.state.productDetail.sku }</Text>
+        </View>
+        <View style={ styles.productAction }>
+          <Button
+            title="Add To Cart"
+            color="#ff5c63"
+            onPress={() => this.props.navigation.goBack()}
+          />
+        </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  productContainer : {
+    flex : 1,
+    padding : 20,
+    backgroundColor : '#f0f0f0'
+  },
+  productImage : {
+    flex : 4,
+    backgroundColor : '#e3e3e3'
+  },
+  productImageImg : {
+    flex : 1,
+  },
+  productInfo : {
+    flex : 3,
+    marginTop : 20,
+  },
+  productAction : {
+    flex : 1,
+  }
+})

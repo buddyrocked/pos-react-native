@@ -5,7 +5,7 @@ import { Entypo } from '@expo/vector-icons';
 
 import Home from './Home';
 import Products from './products/index';
-import Product from './Product';
+import Product from './products/show';
 import ListView from './ListView';
 import Touchables from './Touchables';
 import CartIndex from './carts/index';

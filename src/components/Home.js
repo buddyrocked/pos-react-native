@@ -12,7 +12,7 @@ export default class Home extends Component {
       <View style={{ flex : 1 }}>
         <View style={{ flex : 1, backgroundColor : '#ff5c63', alignItems : 'center', justifyContent : 'center' }}>
         <MaterialCommunityIcons
-          name="angular"
+          name="android"
           size={72}
           color="#fff" />
         </View>

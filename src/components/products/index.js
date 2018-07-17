@@ -9,7 +9,7 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/products?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
+    return fetch(`http://192.168.20.225/point-of-sales/backend/web/v1/prices?expand=product&access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
@@ -49,8 +49,12 @@ export default class Products extends Component {
 
                 </View>
                 <View style={ styles.itemInfo }>
-                  <Text style={ styles.itemInfoCode }>{ item.sku } - { item.type_name }</Text>
-                  <Text style={ styles.itemInfoName }>{ item.name }</Text>
+                  <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
+                  <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
+                  <Text style={ styles.itemInfoPrice }>
+                    <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
+                     { item.price }
+                  </Text>
                 </View>
                 <View style={ styles.itemAction }>
                   <TouchableOpacity
@@ -58,8 +62,8 @@ export default class Products extends Component {
                     accessible={ true }
                     accessibilityLabel={ 'Tap Me' }
                     onPress={ ()=> this.props.navigation.navigate('ProductModal', {
-                      id : item.id,
-                      title : item.name
+                      id : item.product.id,
+                      title : item.product.name
                     })}>
                     <View style={ styles.itemIcon }>
                       <MaterialCommunityIcons
@@ -103,11 +107,17 @@ const styles = StyleSheet.create({
     paddingRight : 10,
   },
   itemInfoCode : {
-    color : '#666',
+    color : '#444',
     fontWeight : 'bold'
   },
   itemInfoName : {
-    color : '#333'
+    color : '#777'
+  },
+  itemInfoPrice : {
+    color : '#ff5c63',
+    fontSize : 12,
+    fontWeight : 'bold',
+    marginTop : 5
   },
   itemAction : {
     flex : 1,
