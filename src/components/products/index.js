@@ -15,29 +15,29 @@ export default class Products extends Component {
   }
 
   addToCart (param1, param2) {
-    return fetch(`http://192.168.20.222/point-of-sales/backend/web/v1/carts?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`, {
+    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`, {
       method: 'POST',
       headers: {
         'Accept'      : 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'id': param1,
-        'value': param2,
+        id: param1,
+        value: param2,
       }),
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      Alert.alert(JSON.stringify(responseJson));
+      Alert.alert(responseJson);
     })
     .catch((error) => {
-      Alert.alert(JSON.stringify(error));
+      Alert.alert(error.message);
       console.log(JSON.stringify(error));
     });
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.20.222/point-of-sales/backend/web/v1/prices?expand=product&access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
+    return fetch(`http://192.168.43.216/delucent/backend/web/v1/prices?expand=product&access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
