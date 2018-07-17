@@ -88,15 +88,22 @@ const MainStack = createStackNavigator(
     Products : {
       screen: Products,
       navigationOptions: ({ navigation }) => ({
-        title: 'Products List',
+        title: 'PRODUCT LIST',
         headerStyle: {
           backgroundColor: '#ff5c63',
         },
         headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-        headerMode : 'float'
+        headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
+        headerMode : 'float',
+        headerRight: (
+          <Entypo
+            style={{ marginRight : 10 }}
+            name="shopping-cart"
+            size={24}
+            color="#ffffff"
+            onPress={() => navigation.navigate('CartIndex')}
+          />
+        ),
       }),
     },
     CartIndex : {
