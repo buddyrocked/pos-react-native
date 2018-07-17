@@ -24,7 +24,7 @@ const MainStack = createStackNavigator(
           BestSeller: {
             screen: ListView,
             navigationOptions: ({ navigation }) => ({
-              title: 'Best Seller',
+              title: 'Sale Today',
               headerStyle: {
                 backgroundColor: '#ff5c63',
               },
@@ -33,7 +33,7 @@ const MainStack = createStackNavigator(
           HotItem: {
             screen: Touchables,
             navigationOptions: ({ navigation }) => ({
-              title: 'Sale',
+              title: 'Summary',
             }),
           },
         },
