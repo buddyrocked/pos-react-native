@@ -17,7 +17,7 @@ export default class Product extends Component {
     const { navigation } = this.props;
     const id = navigation.getParam('id', 'NO-ID');
 
-    return fetch(`http://192.168.20.225/point-of-sales/backend/web/v1/products/${id}?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
+    return fetch(`http://192.168.20.222/point-of-sales/backend/web/v1/products/${id}?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){

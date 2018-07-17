@@ -60,6 +60,7 @@ const MainStack = createStackNavigator(
         headerStyle : {
           backgroundColor : '#ff5c63',
           opacity : 1,
+          elevation : 1
         },
         headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
         headerTintColor: '#fff',

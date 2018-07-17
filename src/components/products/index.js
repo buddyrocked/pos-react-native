@@ -1,15 +1,43 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class Products extends Component {
   constructor(props){
     super(props);
-    this.state = { isLoading : true }
+    this.addToCart = this.addToCart.bind(this);
+    this.state = {
+      isLoading : true,
+      id : 1,
+      qty : 1,
+      text : ''
+    }
+  }
+
+  addToCart (param1, param2) {
+    return fetch(`http://192.168.20.222/point-of-sales/backend/web/v1/carts?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`, {
+      method: 'POST',
+      headers: {
+        'Accept'      : 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'id': param1,
+        'value': param2,
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      Alert.alert(JSON.stringify(responseJson));
+    })
+    .catch((error) => {
+      Alert.alert(JSON.stringify(error));
+      console.log(JSON.stringify(error));
+    });
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.20.225/point-of-sales/backend/web/v1/prices?expand=product&access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
+    return fetch(`http://192.168.20.222/point-of-sales/backend/web/v1/prices?expand=product&access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
@@ -40,6 +68,13 @@ export default class Products extends Component {
 
     return(
       <View style={ styles.listContainer }>
+        <View>
+          <TextInput style={ styles.input } placeholder='Search Products'
+          onChangeText={ (text) => this.setState({ text }) } />
+          <Text style={ styles.text }>
+            { this.state.text.split(' ').map((word) => word && '🍕').join(' ') }
+          </Text>
+        </View>
         <FlatList
           data={ this.state.dataSource }
           renderItem={ ({item}) =>
@@ -61,10 +96,7 @@ export default class Products extends Component {
                     style={{ flex : 1 }}
                     accessible={ true }
                     accessibilityLabel={ 'Tap Me' }
-                    onPress={ ()=> this.props.navigation.navigate('ProductModal', {
-                      id : item.product.id,
-                      title : item.product.name
-                    })}>
+                    onPress={ () => this.addToCart(item.id, item.id) }>
                     <View style={ styles.itemIcon }>
                       <MaterialCommunityIcons
                         name="cart-plus"
@@ -122,4 +154,11 @@ const styles = StyleSheet.create({
   itemAction : {
     flex : 1,
   },
+  input : {
+    paddingTop : 20,
+    paddingBottom : 20,
+    paddingLeft : 5,
+    paddingRight : 5,
+  },
+
 });
