@@ -71,12 +71,12 @@ export default class Products extends Component {
         </View>
         <View style={ styles.actionContainer }>
           <View style={{ flex : 1 }}>
-            <Text><MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" /> { this.state.total }</Text>
-            <Text><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.state.terbilang }</Text>
+            <Text style={ styles.actionMoney }><MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" /> { this.state.total }</Text>
+            <Text style={ styles.actionSpell }><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.state.terbilang }</Text>
           </View>
           <View style={{ flex : 1 }}>
             <Button
-              title="PROCESS"
+              title="PROCCESS"
               color="#ff5c63"
               onPress={ () => this.clearCart() }/>
           </View>
@@ -138,5 +138,11 @@ const styles = StyleSheet.create({
     flex : 2,
     backgroundColor : '#fff',
     padding : 20
+  },
+  actionMoney : {
+    fontWeight : 'bold',
+  },
+  actionSpell : {
+    color : '#333'
   }
 });

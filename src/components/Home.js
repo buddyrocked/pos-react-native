@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showAlert: false };
+  };
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
+
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {};
   };
 
   render() {
+    const {showAlert} = this.state;
     return (
       <View style={{ flex : 1 }}>
         <View style={{ flex : 1, backgroundColor : '#ff5c63', alignItems : 'center', justifyContent : 'center' }}>
@@ -39,7 +58,9 @@ export default class Home extends Component {
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
+                onPress={ ()=> {
+                  this.showAlert();
+                } }>
                 <View style={ styles.iconMenu }>
                   <MaterialCommunityIcons
                     name="dropbox"
@@ -168,6 +189,26 @@ export default class Home extends Component {
             </View>
           </View>
         </View>
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="AwesomeAlert"
+          message="I have a message for you!"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, Cancel"
+          confirmText="Yes, Do it"
+          confirmButtonColor="#ff5c63"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.props.navigation.navigate('Products');
+            this.hideAlert();
+          }}
+        />
       </View>
     );
   }
