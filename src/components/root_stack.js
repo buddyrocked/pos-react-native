@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, View, Text } from 'react-native';
 import { createStackNavigator, createMaterialTopTabNavigator, createDrawerNavigator  } from 'react-navigation';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Home from './Home';
 import Products from './products/index';
@@ -114,10 +114,17 @@ const MainStack = createStackNavigator(
           backgroundColor: '#ff5c63',
         },
         headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-        headerMode : 'float'
+        headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
+        headerMode : 'float',
+        headerRight: (
+          <MaterialCommunityIcons
+            style={{ marginRight : 10 }}
+            name="delete-forever"
+            size={24}
+            color="#ffffff"
+            onPress={() => {navigation.navigate('CartIndex')}}
+          />
+        ),
       }),
     },
   },
