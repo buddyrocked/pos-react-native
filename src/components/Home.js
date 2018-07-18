@@ -192,8 +192,8 @@ export default class Home extends Component {
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
-          title="AwesomeAlert"
-          message="I have a message for you!"
+          title="Information"
+          message="Are you sure want to continue?"
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
