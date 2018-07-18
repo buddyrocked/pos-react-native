@@ -15,7 +15,7 @@ export default class Products extends Component {
   }
 
   addToCart (param1, param2) {
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`, {
+    return fetch(`http://192.168.20.250/point-of-sales/backend/web/v1/carts?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`, {
       method: 'POST',
       headers: {
         'Accept'      : 'application/json',
@@ -28,7 +28,8 @@ export default class Products extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      Alert.alert(responseJson);
+      Alert.alert(responseJson.message);
+      this.props.navigation.navigate('CartIndex');
     })
     .catch((error) => {
       Alert.alert(error.message);
@@ -37,7 +38,7 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/prices?expand=product&access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
+    return fetch(`http://192.168.20.250/point-of-sales/backend/web/v1/prices?expand=product&access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
@@ -96,7 +97,7 @@ export default class Products extends Component {
                     style={{ flex : 1 }}
                     accessible={ true }
                     accessibilityLabel={ 'Tap Me' }
-                    onPress={ () => this.addToCart(item.id, item.id) }>
+                    onPress={ () => this.addToCart(item.id, 1) }>
                     <View style={ styles.itemIcon }>
                       <MaterialCommunityIcons
                         name="cart-plus"
