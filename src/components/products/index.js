@@ -1,21 +1,36 @@
 import React, { Component } from 'react';
 import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Products extends Component {
   constructor(props){
     super(props);
+    this.state = { showAlert: false };
     this.addToCart = this.addToCart.bind(this);
     this.state = {
       isLoading : true,
       id : 1,
       qty : 1,
-      text : ''
+      text : '',
+      message : ''
     }
   }
 
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
+
   addToCart (param1, param2) {
-    return fetch(`http://192.168.20.250/point-of-sales/backend/web/v1/carts?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`, {
+    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`, {
       method: 'POST',
       headers: {
         'Accept'      : 'application/json',
@@ -28,7 +43,10 @@ export default class Products extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      Alert.alert(responseJson.message);
+      this.setState({
+        message : responseJson.message
+      });
+      this.showAlert();
       this.props.navigation.navigate('CartIndex');
     })
     .catch((error) => {
@@ -38,7 +56,7 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.20.250/point-of-sales/backend/web/v1/prices?expand=product&access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
+    return fetch(`http://192.168.43.216/delucent/backend/web/v1/prices?expand=product&access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
@@ -110,6 +128,25 @@ export default class Products extends Component {
             </View>
           }
           keyExtractor={ (item, index) => index.toString() }
+        />
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          title="Information"
+          message={this.state.message}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={false}
+          cancelText="No, Cancel"
+          confirmText="Yes, Do it"
+          confirmButtonColor="#ff5c63"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+          }}
         />
       </View>
     );

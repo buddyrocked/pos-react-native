@@ -1,12 +1,52 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, View, StyleSheet, Text } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Products extends Component {
   constructor(props){
     super(props);
     this.clearCart = this.clearCart.bind(this);
-    this.state = { isLoading : true }
+    this.removeCart = this.removeCart.bind(this);
+    this.setCartId = this.setCartId.bind(this);
+    this.state = { isLoading : true, id : 0 }
+  }
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
+
+  setCartId(id){
+    this.showAlert();
+    this.setState({
+      id: id
+    });
+  }
+
+  removeCart(id) {
+    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts/${id}?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`, {
+      method: 'GET'
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        message : responseJson.message
+      });
+
+      this.props.navigation.navigate('CartIndex');
+    })
+    .catch((error) => {
+      Alert.alert(error.message);
+      console.log(JSON.stringify(error));
+    });
   }
 
   clearCart(){
@@ -14,7 +54,7 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.20.250/point-of-sales/backend/web/v1/carts?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch`)
+    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.count == 0){
@@ -63,6 +103,20 @@ export default class Products extends Component {
                     <Text style={ styles.itemInfoName }>{ item.quantity }{ item.unit }</Text>
                     <Text style={ styles.itemInfoPrice }>{ item.subtotal } </Text>
                   </View>
+                  <View style={ styles.itemAction }>
+                    <TouchableOpacity
+                      style={{ flex : 1 }}
+                      accessible={ true }
+                      accessibilityLabel={ 'Remove Cart' }
+                      onPress={ () => this.setCartId(item.id) }>
+                      <View style={ styles.itemIcon }>
+                        <MaterialCommunityIcons
+                          name="delete"
+                          size={24}
+                          color="#ff5c63" />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             }
@@ -81,6 +135,25 @@ export default class Products extends Component {
               onPress={ () => this.clearCart() }/>
           </View>
         </View>
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          title="Information"
+          message={this.state.message}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, Cancel"
+          confirmText="Yes, Remove"
+          confirmButtonColor="#ff5c63"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.removeCart(this.state.id);
+          }}
+        />
       </View>
     );
   }
