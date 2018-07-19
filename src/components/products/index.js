@@ -203,5 +203,4 @@ const styles = StyleSheet.create({
     paddingLeft : 5,
     paddingRight : 5,
   },
-
 });

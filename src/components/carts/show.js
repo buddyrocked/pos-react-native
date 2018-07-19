@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class Cart extends Component {
   constructor(props){
     super(props);
-    this.state = { isLoading : true, count : 0, total : 0 }
+    this.state = {
+      isLoading : true,
+      count : 0,
+      total : 0,
+      grandTotal : 0
+    }
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -21,7 +26,7 @@ export default class Cart extends Component {
     const url = global.url;
     const access_token = global.access_token;
 
-    return fetch(`${url}carts?access-token=${access_token}`)
+    return fetch(`${url}carts/?access-token=${access_token}`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
@@ -69,12 +74,23 @@ export default class Cart extends Component {
             color="#ff5c63" />
         </View>
         <View style={ styles.cartInfo }>
-          <View style={ styles.cartInfoItem }>
-            <View style={ styles.cartInfoItemIcon }>
-              <MaterialCommunityIcons name="tag-multiple" size={24} color="#ff5c63" />
+          <View style={{ flex:1, flexDirection: 'row' }}>
+            <View style={{ flex : 1 }}>
+              <View style={ styles.cartInfoItem }>
+                <View style={ styles.cartInfoItemText, styles.cartQtyText }>
+                  <Text style={ styles.cartInfoText }>Total</Text>
+                </View>
+              </View>
             </View>
-            <View style={ styles.cartInfoItemText }>
-              <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
+            <View style={{ flex : 2 }}>
+              <View style={ styles.cartInfoItem }>
+                <View style={ styles.cartInfoItemIcon }>
+                  <MaterialCommunityIcons name="tag-multiple" size={24} color="#ff5c63" />
+                </View>
+                <View style={ styles.cartInfoItemText }>
+                  <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
+                </View>
+              </View>
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
@@ -82,12 +98,20 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="gift" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-              <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
+              <TextInput style={ styles.input } placeholder='Discount' />
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
             <View style={ styles.cartInfoItemIcon }>
-              <MaterialCommunityIcons name="minus" size={24} color="#ff5c63" />
+              <MaterialCommunityIcons name="credit-card-plus" size={24} color="#ff5c63" />
+            </View>
+            <View style={ styles.cartInfoItemText }>
+              <TextInput style={ styles.input } placeholder='Pay' />
+            </View>
+          </View>
+          <View style={ styles.cartInfoItem }>
+            <View style={ styles.cartInfoItemIcon }>
+              <MaterialCommunityIcons name="cash-multiple" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
               <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
@@ -163,5 +187,19 @@ const styles = StyleSheet.create({
   cartInfoText : {
     fontWeight : 'bold',
     fontSize : 18
-  }
+  },
+  cartQtyIcon: {
+    flex : 4,
+  },
+  cartQtyText: {
+    flex : 1,
+    justifyContent : 'center',
+    alignItems : 'center'
+  },
+  input : {
+    paddingTop : 20,
+    paddingBottom : 20,
+    paddingLeft : 5,
+    paddingRight : 5,
+  },
 })
