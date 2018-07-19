@@ -91,7 +91,7 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="gift" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-              <TextInput style={ styles.input } placeholder='Discount' />
+              <TextInput style={ styles.input } placeholder='Discount' underlineColorAndroid={'#ff5c63'} keyboardType='numeric' />
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
@@ -99,7 +99,7 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="credit-card-plus" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-              <TextInput style={ styles.input } placeholder='Pay' />
+              <TextInput style={ styles.input } placeholder='Pay' underlineColorAndroid={'#ff5c63'} keyboardType='numeric' />
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
