@@ -6,7 +6,7 @@ export default class Cart extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isLoading : true,
+      isLoading : false,
       count : 0,
       total : 0,
       grandTotal : 0
@@ -20,30 +20,23 @@ export default class Cart extends Component {
   };
 
   componentDidMount(){
-    const { navigation } = this.props;
-    const id = navigation.getParam('id', 'NO-ID');
-
     const url = global.url;
     const access_token = global.access_token;
 
-    return fetch(`${url}carts/?access-token=${access_token}`)
+    return fetch(`${url}carts?access-token=${access_token}`)
       .then((response) => response.json())
       .then((responseJson) => {
-        if(responseJson.code == 0){
-          Alert.alert(responseJson.message);
-        } else {
-          this.setState({
-            isLoading : false,
-            carts : responseJson.items,
-            count : responseJson.count,
-            total : responseJson.total
-          }, function(){
+        this.setState({
+          isLoading : false,
+          carts : responseJson.items,
+          count : responseJson.count,
+          total : responseJson.total
+        }, function(){
 
-          });
-        }
+        });
       })
       .catch((error) => {
-        Alert.alert('error');
+        Alert.alert(error);
         console.log(error);
       });
   }
@@ -171,7 +164,8 @@ const styles = StyleSheet.create({
   },
   cartInfoItemText : {
     flex:4,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingRight : 10
   },
   cartAction : {
     flex : 1,
@@ -186,7 +180,7 @@ const styles = StyleSheet.create({
   },
   cartInfoText : {
     fontWeight : 'bold',
-    fontSize : 18
+    fontSize : 18,
   },
   cartQtyIcon: {
     flex : 4,
