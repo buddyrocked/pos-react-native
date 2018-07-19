@@ -17,7 +17,10 @@ export default class Product extends Component {
     const { navigation } = this.props;
     const id = navigation.getParam('id', 'NO-ID');
 
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/products/${id}?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}products/${id}?access-token=${access_token}`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){

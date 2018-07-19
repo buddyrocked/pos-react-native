@@ -13,7 +13,8 @@ export default class Products extends Component {
       id : 1,
       qty : 1,
       text : '',
-      message : ''
+      message : '',
+      confirmText : 'Oke'
     }
   }
 
@@ -30,7 +31,9 @@ export default class Products extends Component {
   };
 
   addToCart (param1, param2) {
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`, {
+    const url = global.url;
+    const access_token = global.access_token;
+    return fetch(`${url}carts?access-token=${access_token}`, {
       method: 'POST',
       headers: {
         'Accept'      : 'application/json',
@@ -47,7 +50,6 @@ export default class Products extends Component {
         message : responseJson.message
       });
       this.showAlert();
-      this.props.navigation.navigate('CartIndex');
     })
     .catch((error) => {
       Alert.alert(error.message);
@@ -56,7 +58,10 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/prices?expand=product&access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}prices?expand=product&access-token=${access_token}`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.code == 0){
@@ -137,9 +142,9 @@ export default class Products extends Component {
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={false}
-          showConfirmButton={false}
+          showConfirmButton={true}
           cancelText="No, Cancel"
-          confirmText="Yes, Do it"
+          confirmText={this.state.confirmText}
           confirmButtonColor="#ff5c63"
           onCancelPressed={() => {
             this.hideAlert();

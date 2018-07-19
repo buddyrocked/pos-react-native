@@ -8,7 +8,7 @@ export default class Detail extends Component {
   }
 
   componentDidMount(){
-    return fetch('http://192.168.0.203/point-of-sales/backend/web/v1/product?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z')
+    return fetch('http://192.168.0.203/point-of-sales/backend/web/v1/product?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch')
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({

@@ -9,7 +9,7 @@ export default class Products extends Component {
     this.clearCart = this.clearCart.bind(this);
     this.removeCart = this.removeCart.bind(this);
     this.setCartId = this.setCartId.bind(this);
-    this.state = { isLoading : true, id : 0 }
+    this.state = { isLoading : true, id : 0 };
   }
 
   showAlert = () => {
@@ -31,20 +31,21 @@ export default class Products extends Component {
     });
   }
 
-  removeCart(id) {
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts/${id}?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`, {
-      method: 'GET'
+  removeCart() {
+    const { id } = this.state;
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}carts/${id}?access-token=${access_token}`, {
+      method: 'DELETE'
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      this.setState({
-        message : responseJson.message
-      });
-
-      this.props.navigation.navigate('CartIndex');
+      this.hideAlert();
+      this.props.navigation.navigate('Products');
     })
     .catch((error) => {
-      Alert.alert(error.message);
+      Alert.alert('error');
       console.log(JSON.stringify(error));
     });
   }
@@ -54,7 +55,10 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    return fetch(`http://192.168.43.216/delucent/backend/web/v1/carts?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`)
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}carts?access-token=${access_token}`)
       .then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.count == 0){
@@ -112,7 +116,7 @@ export default class Products extends Component {
                       <View style={ styles.itemIcon }>
                         <MaterialCommunityIcons
                           name="delete"
-                          size={24}
+                          size={18}
                           color="#ff5c63" />
                       </View>
                     </TouchableOpacity>
@@ -130,9 +134,9 @@ export default class Products extends Component {
           </View>
           <View style={{ flex : 1 }}>
             <Button
-              title="PROCCESS"
+              title="CHECKOUT"
               color="#ff5c63"
-              onPress={ () => this.clearCart() }/>
+              onPress={ () => this.props.navigation.navigate('Cart') }/>
           </View>
         </View>
         <AwesomeAlert
@@ -151,7 +155,7 @@ export default class Products extends Component {
             this.hideAlert();
           }}
           onConfirmPressed={() => {
-            this.removeCart(this.state.id);
+            this.removeCart();
           }}
         />
       </View>

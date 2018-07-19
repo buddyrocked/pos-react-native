@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createMaterialTopTabNavigator, createDrawerNavigator  } from 'react-navigation';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -9,6 +9,7 @@ import Product from './products/show';
 import ListView from './ListView';
 import Touchables from './Touchables';
 import CartIndex from './carts/index';
+import Cart from './carts/show';
 
 const MainStack = createStackNavigator(
   {
@@ -81,7 +82,7 @@ const MainStack = createStackNavigator(
             size={24}
             color="#ffffff"
             onPress={() => navigation.navigate('CartIndex')}
-          />
+          ></Entypo>
         ),
       }),
     },
@@ -140,6 +141,9 @@ const RootStack = createStackNavigator(
     },
     ProductModal  : {
       screen : Product
+    },
+    Cart  : {
+      screen : Cart
     }
   },
   {
@@ -160,10 +164,32 @@ export default DrawerStack = createDrawerNavigator({
   contentComponent: (props) => (
     <View style={{ flex : 1 }}>
       <View style={{ flex : 3, backgroundColor : '#ff5c63' }}>
-        <Text>Custom Header</Text>
+        <View style={{ flex : 1}}>
+          <View style={{ flex : 1, justifyContent : 'center', padding : 10 }}>
+            <TouchableOpacity
+              accessible={ true }
+              accessibilityLabel={ 'Close Menu' }
+              onPress={ ()=> { props.navigation.toggleDrawer() } }>
+              <Text style={{ textAlign : 'right' }}>
+                <MaterialCommunityIcons
+                  name="arrow-left-thick"
+                  color="#fff"
+                  size={24}/>
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={ styles.profileImageContainer }>
+            <View style={ styles.profileImage }>
+
+            </View>
+          </View>
+          <View style={{ flex : 1 }}>
+
+          </View>
+        </View>
       </View>
       <View style={{ flex : 6 }}>
-        <Text>Custom Footer</Text>
+        <Text>{ global.SampleVar }</Text>
       </View>
       <View style={{ flex : 1, backgroundColor : '#f0f0f0' }}>
         <Text>Custom Header</Text>
@@ -171,3 +197,18 @@ export default DrawerStack = createDrawerNavigator({
     </View>
   )
 });
+
+const styles = StyleSheet.create({
+  profileImageContainer : {
+    alignItems : 'center',
+    justifyContent : 'center',
+    flex : 4,
+    padding : 20
+  },
+  profileImage : {
+    backgroundColor : '#f0f0f0',
+    borderRadius : 50,
+    height : 100,
+    width : 100
+  }
+})
