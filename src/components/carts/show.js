@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class Cart extends Component {
@@ -9,8 +9,29 @@ export default class Cart extends Component {
       isLoading : false,
       count : 0,
       total : 0,
-      grandTotal : 0
+      grand_total : 0,
+      discount : 0,
+      tax : 0,
+      pay : 0,
+      change : 0,
+      note : '',
+      customer_id : 1,
+      user_id : 1,
+      print : false,
+      status : false
     }
+  }
+
+  toggleSwitchPrint = (value) => {
+    this.setState({
+      print : value
+    });
+  }
+
+  toggleSwitchStatus = (value) => {
+    this.setState({
+      status : value
+    });
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -30,7 +51,9 @@ export default class Cart extends Component {
           isLoading : false,
           carts : responseJson.items,
           count : responseJson.count,
-          total : responseJson.total
+          total : responseJson.total,
+          grand_total : responseJson.total,
+          pay   : responseJson.total
         }, function(){
 
         });
@@ -39,6 +62,12 @@ export default class Cart extends Component {
         Alert.alert(error);
         console.log(error);
       });
+  }
+
+  calculateChange = (pay) => {
+    this.setState({
+      change : this.state.pay - this.state.total
+    });
   }
 
   render() {
@@ -67,23 +96,12 @@ export default class Cart extends Component {
             color="#ff5c63" />
         </View>
         <View style={ styles.cartInfo }>
-          <View style={{ flex:1, flexDirection: 'row' }}>
-            <View style={{ flex : 1 }}>
-              <View style={ styles.cartInfoItem }>
-                <View style={ styles.cartInfoItemText, styles.cartQtyText }>
-                  <Text style={ styles.cartInfoText }>Total</Text>
-                </View>
-              </View>
+          <View style={ styles.cartInfoItem }>
+            <View style={ styles.cartInfoItemIcon }>
+              <MaterialCommunityIcons name="cart" size={24} color="#ff5c63" />
             </View>
-            <View style={{ flex : 2 }}>
-              <View style={ styles.cartInfoItem }>
-                <View style={ styles.cartInfoItemIcon }>
-                  <MaterialCommunityIcons name="tag-multiple" size={24} color="#ff5c63" />
-                </View>
-                <View style={ styles.cartInfoItemText }>
-                  <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
-                </View>
-              </View>
+            <View style={ styles.cartInfoItemText }>
+                <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
@@ -91,7 +109,7 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="gift" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-              <TextInput style={ styles.input } placeholder='Discount' underlineColorAndroid={'#ff5c63'} keyboardType='numeric' />
+              <TextInput style={ styles.input } onChangeText={ discount => this.setState({discount}) } placeholder='Discount' underlineColorAndroid={'transparent'} keyboardType='numeric' />
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
@@ -99,15 +117,31 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="credit-card-plus" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-              <TextInput style={ styles.input } placeholder='Pay' underlineColorAndroid={'#ff5c63'} keyboardType='numeric' />
+              <TextInput style={ styles.input } onChangeText={ pay => this.calculateChange(pay) } placeholder='Pay' underlineColorAndroid={'transparent'} keyboardType='numeric' />
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
-            <View style={ styles.cartInfoItemIcon }>
-              <MaterialCommunityIcons name="cash-multiple" size={24} color="#ff5c63" />
+            <View style={{ flex : 1 }}>
+              <View style={ styles.cartInfoItemText }>
+                <Text style={ styles.cartInfoText }>{ this.state.change }</Text>
+              </View>
             </View>
-            <View style={ styles.cartInfoItemText }>
-              <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
+            <View style={{ flex : 1 }}>
+              <View style={ styles.cartInfoItemText }>
+                <Text style={ styles.cartInfoText }>{ this.state.grand_total }</Text>
+              </View>
+            </View>
+          </View>
+          <View style={{ flex:1, flexDirection: 'row' }}>
+            <View style={{ flex : 1 }}>
+              <View style={ styles.cartInfoItem }>
+                <Switch value={ this.state.print } onValueChange={ this.toggleSwitchPrint } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Print" />
+              </View>
+            </View>
+            <View style={{ flex : 1 }}>
+              <View style={ styles.cartInfoItem }>
+                <Switch value={ this.state.status } onValueChange={ this.toggleSwitchStatus } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Status" />
+              </View>
             </View>
           </View>
         </View>
@@ -142,12 +176,12 @@ const styles = StyleSheet.create({
   },
   cartImage : {
     backgroundColor : '#fff',
-    flex : 3,
+    flex : 2,
     alignItems : 'center',
     justifyContent : 'center'
   },
   cartInfo : {
-    flex : 4,
+    flex : 5,
     marginTop : 20,
   },
   cartInfoItem : {
@@ -165,7 +199,8 @@ const styles = StyleSheet.create({
   cartInfoItemText : {
     flex:4,
     justifyContent: 'center',
-    paddingRight : 10
+    paddingRight : 10,
+    paddingLeft : 10
   },
   cartAction : {
     flex : 1,
@@ -195,5 +230,7 @@ const styles = StyleSheet.create({
     paddingBottom : 20,
     paddingLeft : 5,
     paddingRight : 5,
+    fontWeight : 'bold',
+    fontSize : 18,
   },
 })
