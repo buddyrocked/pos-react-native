@@ -9,6 +9,7 @@ export default class Cart extends Component {
       isLoading : false,
       count : 0,
       total : 0,
+      total_text : 0,
       grand_total : 0,
       discount : 0,
       tax : 0,
@@ -17,8 +18,8 @@ export default class Cart extends Component {
       note : '',
       customer_id : 1,
       user_id : 1,
-      print : false,
-      status : false
+      print : true,
+      status : true
     }
   }
 
@@ -52,6 +53,7 @@ export default class Cart extends Component {
           carts : responseJson.items,
           count : responseJson.count,
           total : responseJson.total,
+          total_text : responseJson.total_text,
           grand_total : responseJson.total,
           pay   : responseJson.total
         }, function(){
@@ -66,7 +68,47 @@ export default class Cart extends Component {
 
   calculateChange = (pay) => {
     this.setState({
-      change : this.state.pay - this.state.total
+      change : pay - this.state.grand_total
+    });
+  }
+
+  calculateDiscount = (discount) => {
+    this.setState({
+      grand_total : this.state.total - discount
+    });
+  }
+
+  submit() {
+    const url = global.url;
+    const access_token = global.access_token;
+    return fetch(`${url}carts/submit?access-token=${access_token}`, {
+      method: 'POST',
+      headers: {
+        'Accept'      : 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        total : this.state.total,
+        grand_total : this.state.grand_total,
+        discount : this.state.discount,
+        tax : this.state.tax,
+        pay : this.state.pay,
+        change : this.state.change,
+        note : this.state.note,
+        customer_id : this.state.customer_id,
+        user_id : this.state.user_id,
+        print : this.state.print,
+        status : this.state.status
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      Alert.alert(responseJson.message);
+      this.props.navigation.navigate('Home');
+    })
+    .catch((error) => {
+      Alert.alert(error.message);
+      console.log(JSON.stringify(error));
     });
   }
 
@@ -88,7 +130,7 @@ export default class Cart extends Component {
             size={24}
             color="#ddd"
             onPress={ ()=> this.props.navigation.navigate('CartIndex') } />
-          </View>
+        </View>
         <View style={ styles.cartImage }>
           <MaterialCommunityIcons
             name="credit-card-plus"
@@ -101,7 +143,7 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="cart" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-                <Text style={ styles.cartInfoText }>{ this.state.total }</Text>
+                <Text style={ styles.cartInfoText }>{ this.state.total_text }</Text>
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
@@ -109,7 +151,7 @@ export default class Cart extends Component {
               <MaterialCommunityIcons name="gift" size={24} color="#ff5c63" />
             </View>
             <View style={ styles.cartInfoItemText }>
-              <TextInput style={ styles.input } onChangeText={ discount => this.setState({discount}) } placeholder='Discount' underlineColorAndroid={'transparent'} keyboardType='numeric' />
+              <TextInput style={ styles.input } onChangeText={ discount => this.calculateDiscount(discount) } placeholder='Discount' underlineColorAndroid={'transparent'} keyboardType='numeric' />
             </View>
           </View>
           <View style={ styles.cartInfoItem }>
@@ -123,24 +165,40 @@ export default class Cart extends Component {
           <View style={ styles.cartInfoItem }>
             <View style={{ flex : 1 }}>
               <View style={ styles.cartInfoItemText }>
-                <Text style={ styles.cartInfoText }>{ this.state.change }</Text>
+                <Text style={ styles.smallLabel }>Change</Text>
+                <Text style={ styles.cartInfoTextCenterRed }>Rp.{ this.state.change }</Text>
               </View>
             </View>
             <View style={{ flex : 1 }}>
               <View style={ styles.cartInfoItemText }>
-                <Text style={ styles.cartInfoText }>{ this.state.grand_total }</Text>
+                <Text style={ styles.smallLabel }>Grand Total</Text>
+                <Text style={ styles.cartInfoTextCenter }>Rp.{ this.state.grand_total }</Text>
               </View>
             </View>
           </View>
-          <View style={{ flex:1, flexDirection: 'row' }}>
+          <View style={ styles.cartInfoItem }>
             <View style={{ flex : 1 }}>
-              <View style={ styles.cartInfoItem }>
-                <Switch value={ this.state.print } onValueChange={ this.toggleSwitchPrint } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Print" />
+              <View style={ styles.cartInfoItemText }>
+                <View style={{ flex : 1, flexDirection : 'row' }}>
+                  <View style={{ flex : 1, justifyContent : 'center' }}>
+                    <Text style={{ color : '#666', fontSize : 11 }}>Print</Text>
+                  </View>
+                  <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
+                    <Switch value={ this.state.print } onValueChange={ this.toggleSwitchPrint } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Print" />
+                  </View>
+                </View>
               </View>
             </View>
             <View style={{ flex : 1 }}>
-              <View style={ styles.cartInfoItem }>
-                <Switch value={ this.state.status } onValueChange={ this.toggleSwitchStatus } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Status" />
+              <View style={ styles.cartInfoItemText }>
+                <View style={{ flex : 1, flexDirection : 'row' }}>
+                  <View style={{ flex : 1, justifyContent : 'center' }}>
+                    <Text style={{ color : '#666', fontSize : 11 }}>Status</Text>
+                  </View>
+                  <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
+                    <Switch value={ this.state.status } onValueChange={ this.toggleSwitchStatus } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Status" />
+                  </View>
+                </View>
               </View>
             </View>
           </View>
@@ -150,7 +208,7 @@ export default class Cart extends Component {
             accessible={ true }
             style={{ flex : 1 }}
             accessibilityLabel={ 'Process' }
-            onPress={ () => this.props.navigation.navigate('Products') }>
+            onPress={ () => this.submit() }>
             <View style={ styles.buttonAction }>
               <Text style={{ fontSize:24, color: '#fff', fontWeight: 'bold' }}><MaterialCommunityIcons name="check-circle-outline" size={24} color="#fff" /> PROCESS</Text>
             </View>
@@ -217,6 +275,17 @@ const styles = StyleSheet.create({
     fontWeight : 'bold',
     fontSize : 18,
   },
+  cartInfoTextCenter : {
+    fontWeight : 'bold',
+    fontSize : 18,
+    textAlign : 'center'
+  },
+  cartInfoTextCenterRed : {
+    color : '#ff5c63',
+    fontWeight : 'bold',
+    fontSize : 18,
+    textAlign : 'center'
+  },
   cartQtyIcon: {
     flex : 4,
   },
@@ -226,11 +295,20 @@ const styles = StyleSheet.create({
     alignItems : 'center'
   },
   input : {
+    color : '#666',
     paddingTop : 20,
     paddingBottom : 20,
-    paddingLeft : 5,
+    paddingLeft : 0,
     paddingRight : 5,
     fontWeight : 'bold',
     fontSize : 18,
   },
+  textCenter : {
+    textAlign : 'center',
+  },
+  smallLabel : {
+    color : '#666',
+    fontSize : 11,
+    textAlign : 'center'
+  }
 })

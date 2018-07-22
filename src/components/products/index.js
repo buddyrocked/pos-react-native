@@ -57,6 +57,12 @@ export default class Products extends Component {
     });
   }
 
+  ListEmptyView = () => {
+    return (
+        <Text style={{textAlign: 'center'}}> Cart Is Empty</Text>
+    );
+  }
+
   componentDidMount(){
     const url = global.url;
     const access_token = global.access_token;
@@ -92,48 +98,55 @@ export default class Products extends Component {
 
     return(
       <View style={ styles.listContainer }>
-        <View>
-          <TextInput style={ styles.input } placeholder='Search Products'
-          onChangeText={ (text) => this.setState({ text }) } />
-          <Text style={ styles.text }>
-            { this.state.text.split(' ').map((word) => word && '🍕').join(' ') }
-          </Text>
+        <View style={{ flex : 1, flexDirection : 'row' }}>
+          <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
+            <MaterialCommunityIcons
+              name="magnify-minus-outline"
+              size={30}
+              color="#ff5c63" />
+          </View>
+          <View style={{ flex : 8 }}>
+            <TextInput style={ styles.input } placeholder='Search Products' underlineColorAndroid={'transparent'}
+            onChangeText={ (text) => this.setState({ text }) } />
+          </View>
         </View>
-        <FlatList
-          data={ this.state.dataSource }
-          renderItem={ ({item}) =>
-            <View style={ styles.itemContainer }>
-              <View style={{ flex : 1, flexDirection : 'row' }}>
-                <View style={ styles.itemImage }>
+        <View style={{ flex : 9 }}>
+          <FlatList
+            data={ this.state.dataSource }
+            renderItem={ ({item}) =>
+              <View style={ styles.itemContainer }>
+                <View style={{ flex : 1, flexDirection : 'row' }}>
+                  <View style={ styles.itemImage }>
 
-                </View>
-                <View style={ styles.itemInfo }>
-                  <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
-                  <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
-                  <Text style={ styles.itemInfoPrice }>
-                    <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
-                     { item.price }
-                  </Text>
-                </View>
-                <View style={ styles.itemAction }>
-                  <TouchableOpacity
-                    style={{ flex : 1 }}
-                    accessible={ true }
-                    accessibilityLabel={ 'Tap Me' }
-                    onPress={ () => this.addToCart(item.id, 1) }>
-                    <View style={ styles.itemIcon }>
-                      <MaterialCommunityIcons
-                        name="cart-plus"
-                        size={30}
-                        color="#ff5c63" />
-                    </View>
-                  </TouchableOpacity>
+                  </View>
+                  <View style={ styles.itemInfo }>
+                    <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
+                    <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
+                    <Text style={ styles.itemInfoPrice }>
+                      <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
+                       { item.price }
+                    </Text>
+                  </View>
+                  <View style={ styles.itemAction }>
+                    <TouchableOpacity
+                      style={{ flex : 1 }}
+                      accessible={ true }
+                      accessibilityLabel={ 'Tap Me' }
+                      onPress={ () => this.addToCart(item.id, 1) }>
+                      <View style={ styles.itemIcon }>
+                        <MaterialCommunityIcons
+                          name="cart-plus"
+                          size={30}
+                          color="#ff5c63" />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          }
-          keyExtractor={ (item, index) => index.toString() }
-        />
+            }
+            keyExtractor={ (item, index) => index.toString() }
+          />
+        </View>
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}
@@ -165,8 +178,9 @@ const styles = StyleSheet.create({
     flex : 1
   },
   listContainer : {
+    backgroundColor : '#fff',
     flex : 1,
-    margin : 5
+    margin : 0
   },
   itemContainer : {
     padding : 15, backgroundColor : 'white', marginBottom : -1, borderColor : '#e0e0e0', borderWidth : 1
@@ -200,7 +214,9 @@ const styles = StyleSheet.create({
   input : {
     paddingTop : 20,
     paddingBottom : 20,
-    paddingLeft : 5,
-    paddingRight : 5,
+    paddingLeft : 20,
+    paddingRight : 20,
+    fontSize : 16,
+    fontWeight : 'bold'
   },
 });

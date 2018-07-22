@@ -6,11 +6,104 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 export default class Products extends Component {
   constructor(props){
     super(props);
-    this.clearCart = this.clearCart.bind(this);
     this.removeCart = this.removeCart.bind(this);
     this.setCartId = this.setCartId.bind(this);
+    //this.clearCart = this.clearCart.bind(this);
     this.state = { isLoading : true, id : 0 };
   }
+
+  static clearCart = () => {
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}carts/clear-cart?access-token=${access_token}`, {
+      method: 'DELETE'
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      Alert.alert('hahah');
+      this.setState({
+        dataSource : null
+      });
+    })
+    .catch((error) => {
+      Alert.alert(error.message);
+      console.warn(JSON.stringify(error));
+    });
+  }
+
+  componentDidMount(){
+    this.props.navigation.setParams({ clearCart: ()=>this.clearCart, test : 'ahahahaha' });
+
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}carts?access-token=${access_token}`)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if(responseJson.count == 0){
+          this.setState({
+            isLoading : false,
+            dataSource : responseJson.items,
+            total : responseJson.total,
+            count : responseJson.count,
+            terbilang : responseJson.terbilang
+          });
+        } else {
+          this.setState({
+            isLoading : false,
+            dataSource : responseJson.items,
+            total : responseJson.total,
+            count : responseJson.count,
+            terbilang : responseJson.terbilang
+          }, function(){
+
+          });
+        }
+      })
+      .catch((error) => {
+        Alert.alert(error);
+        console.log(error);
+      });
+  }
+
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state;
+    
+    return {
+      title: 'Shopping Cart',
+      headerStyle: {
+        backgroundColor: '#ff5c63',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
+      headerMode : 'float',
+      headerRight: (
+        <MaterialCommunityIcons
+          style={{ marginRight : 10 }}
+          name="delete-forever"
+          size={24}
+          color="#ffffff"
+          onPress={ () => {
+            const url = global.url;
+            const access_token = global.access_token;
+
+            return fetch(`${url}carts/clear-cart?access-token=${access_token}`, {
+              method: 'DELETE'
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              navigation.push('CartIndex');
+            })
+            .catch((error) => {
+              Alert.alert(error.message);
+              console.warn(JSON.stringify(error));
+            });
+          }}
+        />
+      )
+    }
+  };
 
   showAlert = () => {
     this.setState({
@@ -50,35 +143,14 @@ export default class Products extends Component {
     });
   }
 
-  clearCart(){
-    Alert.alert('Cart Cleared..!');
-  }
 
-  componentDidMount(){
-    const url = global.url;
-    const access_token = global.access_token;
 
-    return fetch(`${url}carts?access-token=${access_token}`)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if(responseJson.count == 0){
-          Alert.alert("Cart is Empty.");
-        } else {
-          this.setState({
-            isLoading : false,
-            dataSource : responseJson.items,
-            total : responseJson.total,
-            count : responseJson.count,
-            terbilang : responseJson.terbilang
-          }, function(){
-
-          });
-        }
-      })
-      .catch((error) => {
-        Alert.alert(error);
-        console.log(error);
-      });
+  ListEmptyView = () => {
+    return (
+      <View style={{ flex : 1, justifyContent : 'center' }}>
+        <Text style={{textAlign: 'center'}}> Cart Is Empty</Text>
+      </View>
+    );
   }
 
   render() {
@@ -86,7 +158,18 @@ export default class Products extends Component {
       return(
         <View style={{ flex : 1, padding : 20, justifyContent : 'center' }}>
           <ActivityIndicator size="large" />
-          <Text style={{ textAlign : 'center', marginTop: 20, fontWeight : 'bold', color : '#666' }}>Shopping Cart is Empty</Text>
+        </View>
+      );
+    }
+
+    if(this.state.count == 0){
+      return(
+        <View style={{ flex : 1, padding : 20, justifyContent : 'center', alignItems : 'center' }}>
+          <MaterialCommunityIcons
+            name="cart-off"
+            size={72}
+            color="#ff5c63" />
+          <Text style={{textAlign: 'center'}}> Cart Is Empty</Text>
         </View>
       );
     }
@@ -125,6 +208,7 @@ export default class Products extends Component {
               </View>
             }
             keyExtractor={ (item, index) => index.toString() }
+            ListEmptyComponent={ this.ListEmptyComponent }
           />
         </View>
         <View style={ styles.actionContainer }>

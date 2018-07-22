@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createMaterialTopTabNavigator, createDrawerNavigator  } from 'react-navigation';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -76,13 +76,13 @@ const MainStack = createStackNavigator(
           />
         ),
         headerRight: (
-          <Entypo
+          <MaterialCommunityIcons
             style={{ marginRight : 10 }}
-            name="shopping-cart"
+            name="cart-outline"
             size={24}
             color="#ffffff"
             onPress={() => navigation.navigate('CartIndex')}
-          ></Entypo>
+          />
         ),
       }),
     },
@@ -97,9 +97,9 @@ const MainStack = createStackNavigator(
         headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
         headerMode : 'float',
         headerRight: (
-          <Entypo
+          <MaterialCommunityIcons
             style={{ marginRight : 10 }}
-            name="shopping-cart"
+            name="cart-outline"
             size={24}
             color="#ffffff"
             onPress={() => navigation.navigate('CartIndex')}
@@ -109,24 +109,7 @@ const MainStack = createStackNavigator(
     },
     CartIndex : {
       screen: CartIndex,
-      navigationOptions: ({ navigation }) => ({
-        title: 'Shopping Cart',
-        headerStyle: {
-          backgroundColor: '#ff5c63',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
-        headerMode : 'float',
-        headerRight: (
-          <MaterialCommunityIcons
-            style={{ marginRight : 10 }}
-            name="delete-forever"
-            size={24}
-            color="#ffffff"
-            onPress={() => {navigation.navigate('CartIndex')}}
-          />
-        ),
-      }),
+
     },
   },
   {
@@ -152,7 +135,7 @@ const RootStack = createStackNavigator(
   }
 );
 
-export default DrawerStack = createDrawerNavigator({
+const DrawerStack = createDrawerNavigator({
   Home : {
     screen : RootStack,
   },
@@ -212,3 +195,9 @@ const styles = StyleSheet.create({
     width : 100
   }
 })
+
+export default class RootStacks extends Component {
+  render(){
+    return <DrawerStack />
+  }
+}
