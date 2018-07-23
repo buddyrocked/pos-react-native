@@ -30,7 +30,6 @@ class Carts extends Component {
     })
     .catch((error) => {
       Alert.alert(error.message);
-      console.warn(JSON.stringify(error));
     });
   }
 

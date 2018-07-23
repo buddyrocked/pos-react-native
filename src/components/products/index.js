@@ -78,6 +78,8 @@ class Products extends Component {
     return fetch(`${url}prices?expand=product&access-token=${access_token}`)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.warn(this.props.products);
+        console.warn(responseJson.items);
         if(responseJson.code == 0){
           Alert.alert(responseJson.message);
         } else {
