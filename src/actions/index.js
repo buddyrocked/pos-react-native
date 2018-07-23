@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const HOME            = 'home'; 
+export const FETCH_HOME      = 'fetch_home';
 
 export const FETCH_PRODUCTS  = 'fetch_products';
 export const FETCH_PRODUCT   = 'fetch_product';
@@ -14,20 +14,20 @@ export const CLEAR_CART      = 'clear_cart';
 const ROOT_URL = `http://192.168.20.250/point-of-sales/backend/web/v1/`;
 const API_KEY = '?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch';
 
-export function home() {
+export function fetchHome() {
   const request = {
                     data : {
                               title : 'Ini Title'
                     }
                   };
   return {
-    type: HOME,
+    type: FETCH_HOME,
     payload: request
   }
 }
 
 export function fetchProducts() {
-  const request = axios.get(`${ROOT_URL}/products${API_KEY}`);
+  const request = axios.get(`${ROOT_URL}products${API_KEY}`);
   return {
     type: FETCH_PRODUCTS,
     payload: request

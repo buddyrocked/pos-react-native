@@ -5,7 +5,7 @@ import ProductsReducer from './reducer_products';
 import CartsReducer from './reducer_carts';
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state,
+  //state: (state = {}) => state,
   home: HomeReducer,
   products: ProductsReducer,
   carts: CartsReducer,

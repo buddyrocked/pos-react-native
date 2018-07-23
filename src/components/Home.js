@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { home } from '../actions';
+import { fetchHome } from '../actions';
 
 class Home extends Component {
   constructor(props) {
@@ -29,7 +29,9 @@ class Home extends Component {
   };
 
   componentDidMount(){
-    this.props.home();
+    this.props.fetchHome();
+
+    console.warn(this.props.home);
   }
 
   render() {
@@ -226,7 +228,7 @@ function mapStateToProps(state){
   return { home: state.home };
 }
 
-export default connect(mapStateToProps, { home })(Home);
+export default connect(mapStateToProps, { fetchHome })(Home);
 
 const styles = StyleSheet.create({
   textMenu : {
