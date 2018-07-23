@@ -69,9 +69,30 @@ class Products extends Component {
   componentDidMount(){
     this.props.fetchProducts();
     this.setState({
-      isLoading : false,
       dataSource : this.props.products.data
     });
+
+    const url = global.url;
+    const access_token = global.access_token;
+
+    return fetch(`${url}prices?expand=product&access-token=${access_token}`)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if(responseJson.code == 0){
+          Alert.alert(responseJson.message);
+        } else {
+          this.setState({
+            isLoading : false,
+            dataSource : responseJson.items,
+          }, function(){
+
+          });
+        }
+      })
+      .catch((error) => {
+        Alert.alert(error);
+        console.log(error);
+      });
   }
 
   render() {
