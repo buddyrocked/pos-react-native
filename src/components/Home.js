@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { home } from '../actions';
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.state = { showAlert: false };
@@ -25,7 +28,12 @@ export default class Home extends Component {
     const params = navigation.state.params || {};
   };
 
+  componentDidMount(){
+    this.props.home();
+  }
+
   render() {
+
     const {showAlert} = this.state;
     return (
       <View style={{ flex : 1 }}>
@@ -213,6 +221,12 @@ export default class Home extends Component {
     );
   }
 }
+
+function mapStateToProps(state){
+  return { home: state.home };
+}
+
+export default connect(mapStateToProps, { home })(Home);
 
 const styles = StyleSheet.create({
   textMenu : {

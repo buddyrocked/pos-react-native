@@ -20,12 +20,18 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^6.3.1",
+    "axios": "^0.18.0",
     "expo": "^27.0.1",
+    "lodash": "^4.17.10",
     "react": "16.3.1",
     "react-native": "~0.55.2",
     "react-native-awesome-alerts": "^1.0.8",
     "react-native-drawer": "^2.5.0",
     "react-native-vector-icons": "^4.6.0",
-    "react-navigation": "^2.6.2"
+    "react-navigation": "^2.6.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-form": "^7.4.2",
+    "redux-promise": "^0.6.0"
   }
 }

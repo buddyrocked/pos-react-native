@@ -197,6 +197,13 @@ const styles = StyleSheet.create({
 })
 
 export default class RootStacks extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      cart_count : 0,
+      username : '',
+    };
+  }
   render(){
     return <DrawerStack />
   }

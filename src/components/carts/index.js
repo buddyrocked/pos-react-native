@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { Alert, Button, FlatList, ActivityIndicator, Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { fetchCarts } from '../../actions';
 
-export default class Products extends Component {
+class Carts extends Component {
   constructor(props){
     super(props);
     this.removeCart = this.removeCart.bind(this);
     this.setCartId = this.setCartId.bind(this);
-    //this.clearCart = this.clearCart.bind(this);
     this.state = { isLoading : true, id : 0 };
   }
 
@@ -33,7 +35,8 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
-    this.props.navigation.setParams({ clearCart: ()=>this.clearCart, test : 'ahahahaha' });
+
+    this.props.fetchCarts();
 
     const url = global.url;
     const access_token = global.access_token;
@@ -69,7 +72,7 @@ export default class Products extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
-    
+
     return {
       title: 'Shopping Cart',
       headerStyle: {
@@ -154,6 +157,7 @@ export default class Products extends Component {
   }
 
   render() {
+    console.log(this.props.carts);
     if(this.state.isLoading){
       return(
         <View style={{ flex : 1, padding : 20, justifyContent : 'center' }}>
@@ -246,6 +250,13 @@ export default class Products extends Component {
     );
   }
 }
+
+function mapStateToProps(state){
+  return { carts: state.carts };
+}
+
+export default connect(mapStateToProps, { fetchCarts })(Carts);
+
 
 const styles = StyleSheet.create({
   itemIcon : {

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, ScrollView, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { fetchProducts } from '../../actions';
 
-export default class Products extends Component {
+class Products extends Component {
   constructor(props){
     super(props);
     this.state = { showAlert: false };
@@ -64,6 +67,8 @@ export default class Products extends Component {
   }
 
   componentDidMount(){
+    this.props.fetchProducts();
+
     const url = global.url;
     const access_token = global.access_token;
 
@@ -88,6 +93,7 @@ export default class Products extends Component {
   }
 
   render() {
+
     if(this.state.isLoading){
       return(
         <View style={{ flex : 1, padding : 20, justifyContent : 'center' }}>
@@ -95,6 +101,8 @@ export default class Products extends Component {
         </View>
       );
     }
+
+    console.warn(this.props.products);
 
     return(
       <View style={ styles.listContainer }>
@@ -111,41 +119,43 @@ export default class Products extends Component {
           </View>
         </View>
         <View style={{ flex : 9 }}>
-          <FlatList
-            data={ this.state.dataSource }
-            renderItem={ ({item}) =>
-              <View style={ styles.itemContainer }>
-                <View style={{ flex : 1, flexDirection : 'row' }}>
-                  <View style={ styles.itemImage }>
+          <ScrollView>
+            <FlatList
+              data={ this.state.dataSource }
+              renderItem={ ({item}) =>
+                <View style={ styles.itemContainer }>
+                  <View style={{ flex : 1, flexDirection : 'row' }}>
+                    <View style={ styles.itemImage }>
 
-                  </View>
-                  <View style={ styles.itemInfo }>
-                    <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
-                    <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
-                    <Text style={ styles.itemInfoPrice }>
-                      <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
-                       { item.price }
-                    </Text>
-                  </View>
-                  <View style={ styles.itemAction }>
-                    <TouchableOpacity
-                      style={{ flex : 1 }}
-                      accessible={ true }
-                      accessibilityLabel={ 'Tap Me' }
-                      onPress={ () => this.addToCart(item.id, 1) }>
-                      <View style={ styles.itemIcon }>
-                        <MaterialCommunityIcons
-                          name="cart-plus"
-                          size={30}
-                          color="#ff5c63" />
-                      </View>
-                    </TouchableOpacity>
+                    </View>
+                    <View style={ styles.itemInfo }>
+                      <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
+                      <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
+                      <Text style={ styles.itemInfoPrice }>
+                        <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
+                         { item.price }
+                      </Text>
+                    </View>
+                    <View style={ styles.itemAction }>
+                      <TouchableOpacity
+                        style={{ flex : 1 }}
+                        accessible={ true }
+                        accessibilityLabel={ 'Tap Me' }
+                        onPress={ () => this.addToCart(item.id, 1) }>
+                        <View style={ styles.itemIcon }>
+                          <MaterialCommunityIcons
+                            name="cart-plus"
+                            size={30}
+                            color="#ff5c63" />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            }
-            keyExtractor={ (item, index) => index.toString() }
-          />
+              }
+              keyExtractor={ (item, index) => index.toString() }
+            />
+          </ScrollView>
         </View>
         <AwesomeAlert
           show={this.state.showAlert}
@@ -170,6 +180,13 @@ export default class Products extends Component {
     );
   }
 }
+
+function mapStateToProps(state){
+  return { products: state.products };
+}
+
+export default connect(mapStateToProps, { fetchProducts })(Products);
+
 
 const styles = StyleSheet.create({
   itemIcon : {
