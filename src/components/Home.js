@@ -30,12 +30,9 @@ class Home extends Component {
 
   componentDidMount(){
     this.props.fetchHome();
-
-    console.warn(this.props.home);
   }
 
   render() {
-
     const {showAlert} = this.state;
     return (
       <View style={{ flex : 1 }}>

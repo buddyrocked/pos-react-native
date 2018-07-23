@@ -69,7 +69,7 @@ class Products extends Component {
   componentDidMount(){
     this.props.fetchProducts();
     this.setState({
-      dataSource : this.props.products.data
+      dataSource : this.props.products
     });
 
     const url = global.url;
@@ -104,6 +104,9 @@ class Products extends Component {
         </View>
       );
     }
+
+
+    console.warn(this.props.products.item);
 
 
     return(

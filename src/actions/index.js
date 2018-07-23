@@ -11,8 +11,11 @@ export const FETCH_CART      = 'fetch_cart';
 export const DELETE_CART     = 'delete_cart';
 export const CLEAR_CART      = 'clear_cart';
 
-const ROOT_URL = `http://192.168.20.250/point-of-sales/backend/web/v1/`;
-const API_KEY = '?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch';
+//const ROOT_URL = `http://192.168.20.250/point-of-sales/backend/web/v1/`;
+//const API_KEY = '?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch';
+
+const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
+const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 export function fetchHome() {
   const request = {
@@ -35,7 +38,7 @@ export function fetchProducts() {
 }
 
 export function fetchProduct(id) {
-  const request = axios.get(`${ROOT_URL}/products/${id}${API_KEY}`);
+  const request = axios.get(`${ROOT_URL}products/${id}${API_KEY}`);
   return {
     type: FETCH_PRODUCT,
     payload: request
@@ -43,7 +46,7 @@ export function fetchProduct(id) {
 }
 
 export function fetchCarts() {
-  const request = axios.get(`${ROOT_URL}/carts${API_KEY}`);
+  const request = axios.get(`${ROOT_URL}carts${API_KEY}`);
   return {
     type: FETCH_CARTS,
     payload: request
@@ -51,7 +54,7 @@ export function fetchCarts() {
 }
 
 export function createCarts(values, callback){
-  const request = axios.post(`${ROOT_URL}/carts/${API_KEY}`, values)
+  const request = axios.post(`${ROOT_URL}carts${API_KEY}`, values)
     .then(() => callback());
 
   return {
@@ -61,7 +64,7 @@ export function createCarts(values, callback){
 }
 
 export function fetchCart() {
-  const request = axios.get(`${ROOT_URL}/carts${API_KEY}`);
+  const request = axios.get(`${ROOT_URL}carts${API_KEY}`);
   return {
     type: FETCH_CART,
     payload: request
@@ -69,7 +72,7 @@ export function fetchCart() {
 }
 
 export function deleteCart(id, callback) {
-  const request = axios.delete(`${ROOT_URL}/carts/${id}${API_KEY}`)
+  const request = axios.delete(`${ROOT_URL}carts/${id}${API_KEY}`)
     .then(() => callback());
   return {
     type: DELETE_CART,
@@ -78,7 +81,7 @@ export function deleteCart(id, callback) {
 }
 
 export function clearCart(callback) {
-  const request = axios.delete(`${ROOT_URL}/carts/clear-cart${API_KEY}`)
+  const request = axios.delete(`${ROOT_URL}carts/clear-cart${API_KEY}`)
     .then(() => callback());
   return {
     type: CLEAR_CART,
