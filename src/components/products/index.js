@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import { Alert, Button, FlatList, ActivityIndicator, Image, ScrollView, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 import { fetchProducts } from '../../actions';
+import prices from '../../data/products';
+
+const KEYS_TO_FILTERS = ['sku', 'name'];
 
 class Products extends Component {
+
   constructor(props){
     super(props);
     this.state = { showAlert: false };
@@ -17,8 +23,15 @@ class Products extends Component {
       qty : 1,
       text : '',
       message : '',
-      confirmText : 'Oke'
+      confirmText : 'Oke',
+      searchTerm : '',
     }
+
+    this.arrayHolder = [];
+  }
+
+  searchUpdated(term) {
+    this.setState({ searchTerm: term })
   }
 
   showAlert = () => {
@@ -69,33 +82,13 @@ class Products extends Component {
   componentDidMount(){
     this.props.fetchProducts();
     this.setState({
-      dataSource : this.props.products
+      isLoading : false
     });
-
-    const url = global.url;
-    const access_token = global.access_token;
-
-    return fetch(`${url}prices?expand=product&access-token=${access_token}`)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if(responseJson.code == 0){
-          Alert.alert(responseJson.message);
-        } else {
-          this.setState({
-            isLoading : false,
-            dataSource : responseJson.items,
-          }, function(){
-
-          });
-        }
-      })
-      .catch((error) => {
-        Alert.alert(error);
-        console.log(error);
-      });
+    this.arrayHolder = this.props.products.items;
   }
 
   render() {
+
 
     if(this.state.isLoading){
       return(
@@ -105,9 +98,7 @@ class Products extends Component {
       );
     }
 
-
-    console.warn(this.props.products.item);
-
+    const filteredData = this.arrayHolder.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return(
       <View style={ styles.listContainer }>
@@ -119,14 +110,14 @@ class Products extends Component {
               color="#ff5c63" />
           </View>
           <View style={{ flex : 8 }}>
-            <TextInput style={ styles.input } placeholder='Search Products' underlineColorAndroid={'transparent'}
-            onChangeText={ (text) => this.setState({ text }) } />
+            <SearchInput style={ styles.input } placeholder='Search Products' underlineColorAndroid={'transparent'}
+            onChangeText={(term) => { this.searchUpdated(term) }} />
           </View>
         </View>
         <View style={{ flex : 9 }}>
           <ScrollView>
             <FlatList
-              data={ this.state.dataSource }
+              data={ filteredData }
               renderItem={ ({item}) =>
                 <View style={ styles.itemContainer }>
                   <View style={{ flex : 1, flexDirection : 'row' }}>
@@ -185,6 +176,9 @@ class Products extends Component {
     );
   }
 }
+
+Products.propTypes = { products: PropTypes.object };
+Products.defaultProps = { products: { items : {} } };
 
 function mapStateToProps(state){
   return { products: state.products };

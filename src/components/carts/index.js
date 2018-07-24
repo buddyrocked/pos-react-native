@@ -23,7 +23,6 @@ class Carts extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      Alert.alert('hahah');
       this.setState({
         dataSource : null
       });
@@ -34,39 +33,10 @@ class Carts extends Component {
   }
 
   componentDidMount(){
-
     this.props.fetchCarts();
-
-    const url = global.url;
-    const access_token = global.access_token;
-
-    return fetch(`${url}carts?access-token=${access_token}`)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if(responseJson.count == 0){
-          this.setState({
-            isLoading : false,
-            dataSource : responseJson.items,
-            total : responseJson.total,
-            count : responseJson.count,
-            terbilang : responseJson.terbilang
-          });
-        } else {
-          this.setState({
-            isLoading : false,
-            dataSource : responseJson.items,
-            total : responseJson.total,
-            count : responseJson.count,
-            terbilang : responseJson.terbilang
-          }, function(){
-
-          });
-        }
-      })
-      .catch((error) => {
-        Alert.alert(error);
-        console.log(error);
-      });
+    this.setState({
+      isLoading : false
+    });
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -156,7 +126,6 @@ class Carts extends Component {
   }
 
   render() {
-    console.log(this.props.carts);
     if(this.state.isLoading){
       return(
         <View style={{ flex : 1, padding : 20, justifyContent : 'center' }}>
@@ -165,7 +134,7 @@ class Carts extends Component {
       );
     }
 
-    if(this.state.count == 0){
+    if(this.props.carts.count == 0){
       return(
         <View style={{ flex : 1, padding : 20, justifyContent : 'center', alignItems : 'center' }}>
           <MaterialCommunityIcons
@@ -181,7 +150,7 @@ class Carts extends Component {
       <View style={ styles.pageContainer }>
         <View style={ styles.listContainer }>
           <FlatList
-            data={ this.state.dataSource }
+            data={ this.props.carts.items }
             renderItem={ ({item}) =>
               <View style={ styles.itemContainer }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
@@ -216,8 +185,8 @@ class Carts extends Component {
         </View>
         <View style={ styles.actionContainer }>
           <View style={{ flex : 1 }}>
-            <Text style={ styles.actionMoney }><MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" /> { this.state.total }</Text>
-            <Text style={ styles.actionSpell }><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.state.terbilang }</Text>
+            <Text style={ styles.actionMoney }><MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" /> { this.props.carts.total }</Text>
+            <Text style={ styles.actionSpell }><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.props.carts.terbilang }</Text>
           </View>
           <View style={{ flex : 1 }}>
             <Button

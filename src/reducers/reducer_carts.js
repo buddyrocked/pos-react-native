@@ -8,9 +8,9 @@ export default function(state = {}, action){
   case CLEAR_CART:
       return _.omit(state, action.payload);
   case FETCH_CART:
-    return action.payload;
+    return action.payload.data;
   case FETCH_CARTS:
-    return action.payload;
+    return action.payload.data;
   default:
     return state;
   }
