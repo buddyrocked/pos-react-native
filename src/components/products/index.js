@@ -25,13 +25,18 @@ class Products extends Component {
       message : '',
       confirmText : 'Oke',
       searchTerm : '',
+      filteredData : this.props.products.items
     }
 
-    this.arrayHolder = [];
+    this.arrayholder = [];
   }
 
   searchUpdated(term) {
-    this.setState({ searchTerm: term })
+    let newFilteredData = this.props.products.items.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+    this.setState({
+      searchTerm: term,
+      filteredData: newFilteredData
+    });
   }
 
   showAlert = () => {
@@ -79,16 +84,21 @@ class Products extends Component {
     );
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.props.fetchProducts();
     this.setState({
-      isLoading : false
+      filteredData : this.props.products.items
     });
-    this.arrayHolder = this.props.products.items;
+  }
+
+  componentDidMount(){
+    this.setState({
+      isLoading : false,
+      filteredData : this.props.products.items
+    });
   }
 
   render() {
-
 
     if(this.state.isLoading){
       return(
@@ -97,8 +107,6 @@ class Products extends Component {
         </View>
       );
     }
-
-    const filteredData = this.arrayHolder.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return(
       <View style={ styles.listContainer }>
@@ -117,7 +125,7 @@ class Products extends Component {
         <View style={{ flex : 9 }}>
           <ScrollView>
             <FlatList
-              data={ filteredData }
+              data={ this.state.filteredData }
               renderItem={ ({item}) =>
                 <View style={ styles.itemContainer }>
                   <View style={{ flex : 1, flexDirection : 'row' }}>
@@ -176,9 +184,6 @@ class Products extends Component {
     );
   }
 }
-
-Products.propTypes = { products: PropTypes.object };
-Products.defaultProps = { products: { items : {} } };
 
 function mapStateToProps(state){
   return { products: state.products };
