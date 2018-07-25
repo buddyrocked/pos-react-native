@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import SearchInput, { createFilter } from 'react-native-search-filter';
-import { fetchProducts } from '../../actions';
+import Placeholder from 'rn-placeholder';
+
+import { fetchProducts, createCart } from '../../actions';
 import prices from '../../data/products';
 
 const KEYS_TO_FILTERS = ['sku', 'name'];
@@ -18,24 +20,23 @@ class Products extends Component {
     this.state = { showAlert: false };
     this.addToCart = this.addToCart.bind(this);
     this.state = {
-      isLoading : true,
+      isReady : false,
       id : 1,
       qty : 1,
       text : '',
       message : '',
       confirmText : 'Oke',
       searchTerm : '',
-      filteredData : this.props.products.items
     }
+  }
 
-    this.arrayholder = [];
+  static defaultProps = {
+    products: []
   }
 
   searchUpdated(term) {
-    let newFilteredData = this.props.products.items.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     this.setState({
       searchTerm: term,
-      filteredData: newFilteredData
     });
   }
 
@@ -52,7 +53,19 @@ class Products extends Component {
   };
 
   addToCart (param1, param2) {
-    const url = global.url;
+    let values = JSON.stringify({
+      id: param1,
+      value: param2,
+    });
+
+    this.props.createCart(values, () => {
+      this.setState({
+        message : 'Done'
+      });
+      this.showAlert();
+    });
+
+    /*const url = global.url;
     const access_token = global.access_token;
     return fetch(`${url}carts?access-token=${access_token}`, {
       method: 'POST',
@@ -75,7 +88,7 @@ class Products extends Component {
     .catch((error) => {
       Alert.alert(error.message);
       console.log(JSON.stringify(error));
-    });
+    });*/
   }
 
   ListEmptyView = () => {
@@ -84,28 +97,21 @@ class Products extends Component {
     );
   }
 
-  componentWillMount(){
-    this.props.fetchProducts();
-    this.setState({
-      filteredData : this.props.products.items
-    });
-  }
-
   componentDidMount(){
-    this.setState({
-      isLoading : false,
-      filteredData : this.props.products.items
-    });
+    this.props.fetchProducts();
+    setTimeout(() => {
+      this.setState({
+        isReady : true,
+      });
+    }, 2000);
   }
 
   render() {
-
-    if(this.state.isLoading){
-      return(
-        <View style={{ flex : 1, padding : 20, justifyContent : 'center' }}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
+    let filteredData;
+    if(_.isEmpty(this.props.products)){
+      filteredData = [].filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+    }else{
+      filteredData = this.props.products.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     }
 
     return(
@@ -125,36 +131,45 @@ class Products extends Component {
         <View style={{ flex : 9 }}>
           <ScrollView>
             <FlatList
-              data={ this.state.filteredData }
+              data={ filteredData }
               renderItem={ ({item}) =>
                 <View style={ styles.itemContainer }>
-                  <View style={{ flex : 1, flexDirection : 'row' }}>
-                    <View style={ styles.itemImage }>
+                  <Placeholder.ImageContent
+                    size={60}
+                    animate="fade"
+                    lineNumber={4}
+                    lineSpacing={5}
+                    lastLineWidth="30%"
+                    onReady={this.state.isReady}
+                  >
+                    <View style={{ flex : 1, flexDirection : 'row' }}>
+                      <View style={ styles.itemImage }>
 
+                      </View>
+                      <View style={ styles.itemInfo }>
+                        <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
+                        <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
+                        <Text style={ styles.itemInfoPrice }>
+                          <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
+                           { item.price }
+                        </Text>
+                      </View>
+                      <View style={ styles.itemAction }>
+                        <TouchableOpacity
+                          style={{ flex : 1 }}
+                          accessible={ true }
+                          accessibilityLabel={ 'Tap Me' }
+                          onPress={ () => this.addToCart(item.id, 1) }>
+                          <View style={ styles.itemIcon }>
+                            <MaterialCommunityIcons
+                              name="cart-plus"
+                              size={30}
+                              color="#ff5c63" />
+                          </View>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={ styles.itemInfo }>
-                      <Text style={ styles.itemInfoCode }>{ item.product.sku } - { item.product.type_name }</Text>
-                      <Text style={ styles.itemInfoName }>{ item.product.name }</Text>
-                      <Text style={ styles.itemInfoPrice }>
-                        <MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" />
-                         { item.price }
-                      </Text>
-                    </View>
-                    <View style={ styles.itemAction }>
-                      <TouchableOpacity
-                        style={{ flex : 1 }}
-                        accessible={ true }
-                        accessibilityLabel={ 'Tap Me' }
-                        onPress={ () => this.addToCart(item.id, 1) }>
-                        <View style={ styles.itemIcon }>
-                          <MaterialCommunityIcons
-                            name="cart-plus"
-                            size={30}
-                            color="#ff5c63" />
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
+                  </Placeholder.ImageContent>
                 </View>
               }
               keyExtractor={ (item, index) => index.toString() }
@@ -189,7 +204,7 @@ function mapStateToProps(state){
   return { products: state.products };
 }
 
-export default connect(mapStateToProps, { fetchProducts })(Products);
+export default connect(mapStateToProps, { fetchProducts, createCart })(Products);
 
 
 const styles = StyleSheet.create({

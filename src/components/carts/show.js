@@ -165,13 +165,13 @@ export default class Cart extends Component {
           <View style={ styles.cartInfoItem }>
             <View style={{ flex : 1 }}>
               <View style={ styles.cartInfoItemText }>
-                <Text style={ styles.smallLabel }>Change</Text>
+                <Text style={ styles.smallLabel }>CHANGE</Text>
                 <Text style={ styles.cartInfoTextCenterRed }>Rp.{ this.state.change }</Text>
               </View>
             </View>
             <View style={{ flex : 1 }}>
               <View style={ styles.cartInfoItemText }>
-                <Text style={ styles.smallLabel }>Grand Total</Text>
+                <Text style={ styles.smallLabel }>GRAND TOTAL</Text>
                 <Text style={ styles.cartInfoTextCenter }>Rp.{ this.state.grand_total }</Text>
               </View>
             </View>
@@ -181,7 +181,7 @@ export default class Cart extends Component {
               <View style={ styles.cartInfoItemText }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
                   <View style={{ flex : 1, justifyContent : 'center' }}>
-                    <Text style={{ color : '#666', fontSize : 11 }}>Print</Text>
+                    <MaterialCommunityIcons name="printer" size={24} color="#000" />
                   </View>
                   <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
                     <Switch value={ this.state.print } onValueChange={ this.toggleSwitchPrint } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Print" />
@@ -193,7 +193,7 @@ export default class Cart extends Component {
               <View style={ styles.cartInfoItemText }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
                   <View style={{ flex : 1, justifyContent : 'center' }}>
-                    <Text style={{ color : '#666', fontSize : 11 }}>Status</Text>
+                      <MaterialCommunityIcons name="account-check" size={24} color="#000" />
                   </View>
                   <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
                     <Switch value={ this.state.status } onValueChange={ this.toggleSwitchStatus } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Status" />

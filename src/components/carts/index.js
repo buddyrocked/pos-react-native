@@ -4,14 +4,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchCarts } from '../../actions';
+import Placeholder from 'rn-placeholder';
+
+import { fetchCarts, deleteCart } from '../../actions';
 
 class Carts extends Component {
   constructor(props){
     super(props);
     this.removeCart = this.removeCart.bind(this);
     this.setCartId = this.setCartId.bind(this);
-    this.state = { isLoading : true, id : 0 };
+    this.state = { isReady : false, id : 0 };
   }
 
   static clearCart = () => {
@@ -35,7 +37,7 @@ class Carts extends Component {
   componentDidMount(){
     this.props.fetchCarts();
     this.setState({
-      isLoading : false
+      isReady : true,
     });
   }
 
@@ -98,7 +100,17 @@ class Carts extends Component {
 
   removeCart() {
     const { id } = this.state;
-    const url = global.url;
+
+    this.props.deleteCart(id, () => {
+      this.setState({
+        message : 'Done'
+      });
+
+      this.props.navigation.navigate('Products');
+
+    });
+
+    /*const url = global.url;
     const access_token = global.access_token;
 
     return fetch(`${url}carts/${id}?access-token=${access_token}`, {
@@ -112,7 +124,7 @@ class Carts extends Component {
     .catch((error) => {
       Alert.alert('error');
       console.log(JSON.stringify(error));
-    });
+    });*/
   }
 
 
@@ -126,13 +138,6 @@ class Carts extends Component {
   }
 
   render() {
-    if(this.state.isLoading){
-      return(
-        <View style={{ flex : 1, padding : 20, justifyContent : 'center' }}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    }
 
     if(this.props.carts.count == 0){
       return(
@@ -153,30 +158,39 @@ class Carts extends Component {
             data={ this.props.carts.items }
             renderItem={ ({item}) =>
               <View style={ styles.itemContainer }>
-                <View style={{ flex : 1, flexDirection : 'row' }}>
-                  <View style={ styles.itemImage }>
+                <Placeholder.ImageContent
+                  size={60}
+                  animate="fade"
+                  lineNumber={4}
+                  lineSpacing={5}
+                  lastLineWidth="30%"
+                  onReady={this.state.isReady}
+                >
+                  <View style={{ flex : 1, flexDirection : 'row' }}>
+                    <View style={ styles.itemImage }>
 
+                    </View>
+                    <View style={ styles.itemInfo }>
+                      <Text style={ styles.itemInfoCode }>{ item.sku } - { item.type }</Text>
+                      <Text style={ styles.itemInfoName }>{ item.quantity }{ item.unit }</Text>
+                      <Text style={ styles.itemInfoPrice }>{ item.subtotal } </Text>
+                    </View>
+                    <View style={ styles.itemAction }>
+                      <TouchableOpacity
+                        style={{ flex : 1 }}
+                        accessible={ true }
+                        accessibilityLabel={ 'Remove Cart' }
+                        onPress={ () => this.setCartId(item.id) }>
+                        <View style={ styles.itemIcon }>
+                          <MaterialCommunityIcons
+                            name="delete"
+                            size={18}
+                            color="#ff5c63" />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <View style={ styles.itemInfo }>
-                    <Text style={ styles.itemInfoCode }>{ item.sku } - { item.type }</Text>
-                    <Text style={ styles.itemInfoName }>{ item.quantity }{ item.unit }</Text>
-                    <Text style={ styles.itemInfoPrice }>{ item.subtotal } </Text>
-                  </View>
-                  <View style={ styles.itemAction }>
-                    <TouchableOpacity
-                      style={{ flex : 1 }}
-                      accessible={ true }
-                      accessibilityLabel={ 'Remove Cart' }
-                      onPress={ () => this.setCartId(item.id) }>
-                      <View style={ styles.itemIcon }>
-                        <MaterialCommunityIcons
-                          name="delete"
-                          size={18}
-                          color="#ff5c63" />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                </Placeholder.ImageContent>
               </View>
             }
             keyExtractor={ (item, index) => index.toString() }
@@ -184,16 +198,36 @@ class Carts extends Component {
           />
         </View>
         <View style={ styles.actionContainer }>
-          <View style={{ flex : 1 }}>
-            <Text style={ styles.actionMoney }><MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" /> { this.props.carts.total }</Text>
-            <Text style={ styles.actionSpell }><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.props.carts.terbilang }</Text>
-          </View>
-          <View style={{ flex : 1 }}>
-            <Button
-              title="CHECKOUT"
-              color="#ff5c63"
-              onPress={ () => this.props.navigation.navigate('Cart') }/>
-          </View>
+          <Placeholder.Paragraph
+            lineNumber={2}
+            textSize={16}
+            lineSpacing={5}
+            color="#ff0000"
+            width="100%"
+            lastLineWidth="90%"
+            firstLineWidth="30%"
+            onReady={this.state.isReady}
+            >
+            <View style={{ flex : 1 }}>
+              <Text style={ styles.actionMoney }><MaterialCommunityIcons name="tag-multiple" size={12} color="#ff5c63" /> { this.props.carts.total }</Text>
+              <Text style={ styles.actionSpell }><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.props.carts.terbilang }</Text>
+            </View>
+          </Placeholder.Paragraph>
+          <Placeholder.ImageContent
+            size={60}
+            animate="fade"
+            lineNumber={4}
+            lineSpacing={5}
+            lastLineWidth="30%"
+            onReady={this.state.isReady}
+          >
+            <View style={{ flex : 1 }}>
+              <Button
+                title="CHECKOUT"
+                color="#ff5c63"
+                onPress={ () => this.props.navigation.navigate('Cart') }/>
+            </View>
+          </Placeholder.ImageContent>
         </View>
         <AwesomeAlert
           show={this.state.showAlert}
@@ -223,7 +257,7 @@ function mapStateToProps(state){
   return { carts: state.carts };
 }
 
-export default connect(mapStateToProps, { fetchCarts })(Carts);
+export default connect(mapStateToProps, { fetchCarts, deleteCart })(Carts);
 
 
 const styles = StyleSheet.create({
