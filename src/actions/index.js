@@ -11,8 +11,8 @@ export const FETCH_CART      = 'fetch_cart';
 export const DELETE_CART     = 'delete_cart';
 export const CLEAR_CART      = 'clear_cart';
 
-const ROOT_URL = `http://192.168.43.68/point-of-sales/backend/web/v1/`;
-const API_KEY = '?access-token=5OUnd1-w5xqdXvXu8fiUgC7zwW9eCmch';
+const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 //const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
@@ -29,8 +29,8 @@ export function fetchHome() {
   }
 }
 
-export function fetchProducts() {
-  const request = axios.get(`${ROOT_URL}prices${API_KEY}&expand=product`);
+export function fetchProducts(page = 1) {
+  const request = axios.get(`${ROOT_URL}prices${API_KEY}&expand=product&page=${page}`);
   return {
     type: FETCH_PRODUCTS,
     payload: request

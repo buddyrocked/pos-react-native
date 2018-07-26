@@ -19,6 +19,7 @@ class Products extends Component {
     super(props);
     this.state = { showAlert: false };
     this.addToCart = this.addToCart.bind(this);
+    this.changePage = this.changePage.bind(this);
     this.state = {
       isReady : false,
       id : 1,
@@ -27,6 +28,9 @@ class Products extends Component {
       message : '',
       confirmText : 'Oke',
       searchTerm : '',
+      page : 1,
+      nextPage : 1,
+      previousPage : 1,
     }
   }
 
@@ -98,12 +102,44 @@ class Products extends Component {
   }
 
   componentDidMount(){
-    this.props.fetchProducts();
-    setTimeout(() => {
-      this.setState({
-        isReady : true,
-      });
-    }, 2000);
+    this.props.fetchProducts(this.state.page);
+    let nextPage, currentPage;
+    if(_.isEmpty(this.props.products)){
+      nextPage = 2;
+      previousPage = 0;
+    } else {
+      nextPage = this.props.products._meta.currentPage + 1;
+      previousPage = this.props.products._meta.currentPage - 1;
+    }
+
+    this.setState({
+      isReady : true,
+      nextPage : nextPage,
+      previousPage : previousPage
+    });
+  }
+
+  changePage(page){
+    this.setState({
+      isReady : false,
+    });
+    
+    this.props.fetchProducts(page);
+
+    let nextPage, currentPage;
+    if(_.isEmpty(this.props.products)){
+      nextPage = 2;
+      previousPage = 0;
+    } else {
+      nextPage = this.props.products._meta.currentPage + 1;
+      previousPage = this.props.products._meta.currentPage - 1;
+    }
+
+    this.setState({
+      isReady : true,
+      nextPage : nextPage,
+      previousPage : previousPage
+    });
   }
 
   render() {
@@ -111,7 +147,7 @@ class Products extends Component {
     if(_.isEmpty(this.props.products)){
       filteredData = [].filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     }else{
-      filteredData = this.props.products.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+      filteredData = this.props.products.items.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     }
 
     return(
@@ -128,7 +164,7 @@ class Products extends Component {
             onChangeText={(term) => { this.searchUpdated(term) }} />
           </View>
         </View>
-        <View style={{ flex : 9 }}>
+        <View style={{ flex : 8 }}>
           <ScrollView>
             <FlatList
               data={ filteredData }
@@ -175,6 +211,36 @@ class Products extends Component {
               keyExtractor={ (item, index) => index.toString() }
             />
           </ScrollView>
+        </View>
+        <View style={{ flex : 1, flexDirection : 'row' }}>
+          <View style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Previous' }
+                onPress={ () => this.changePage(this.state.previousPage) }>
+                <View  style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
+                  <MaterialCommunityIcons
+                    name="chevron-left"
+                    size={30}
+                    color="#ff5c63" />
+                </View>
+              </TouchableOpacity>
+          </View>
+          <View style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
+            <TouchableOpacity
+              style={{ flex : 1 }}
+              accessible={ true }
+              accessibilityLabel={ 'Next' }
+              onPress={ () => this.changePage(this.state.nextPage) }>
+              <View  style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  size={30}
+                  color="#ff5c63" />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
         <AwesomeAlert
           show={this.state.showAlert}
