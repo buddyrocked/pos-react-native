@@ -181,7 +181,7 @@ export default class Cart extends Component {
               <View style={ styles.cartInfoItemText }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
                   <View style={{ flex : 1, justifyContent : 'center' }}>
-                    <MaterialCommunityIcons name="printer" size={24} color="#000" />
+                    <MaterialCommunityIcons name="printer" size={48} color="#666" />
                   </View>
                   <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
                     <Switch value={ this.state.print } onValueChange={ this.toggleSwitchPrint } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Print" />
@@ -193,7 +193,7 @@ export default class Cart extends Component {
               <View style={ styles.cartInfoItemText }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
                   <View style={{ flex : 1, justifyContent : 'center' }}>
-                      <MaterialCommunityIcons name="account-check" size={24} color="#000" />
+                      <MaterialCommunityIcons name="account-check" size={48} color="#666" />
                   </View>
                   <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
                     <Switch value={ this.state.status } onValueChange={ this.toggleSwitchStatus } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Status" />
