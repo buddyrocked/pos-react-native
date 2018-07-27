@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Alert, Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createMaterialTopTabNavigator, createDrawerNavigator  } from 'react-navigation';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,6 +11,7 @@ import ListView from './ListView';
 import Touchables from './Touchables';
 import CartIndex from './carts/index';
 import Cart from './carts/show';
+import Login from './auth/Login';
 
 const MainStack = createStackNavigator(
   {
@@ -196,15 +198,26 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class RootStacks extends Component {
+class RootStacks extends Component {
   constructor(props){
     super(props);
     this.state = {
       cart_count : 0,
-      username : '',
     };
   }
   render(){
-    return <DrawerStack />
+    if (this.props.isLoggedIn) {
+      return <DrawerStack />
+    } else {
+      return <Login />
+    }
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn
+    };
+}
+
+export default connect(mapStateToProps)(RootStacks);

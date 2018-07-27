@@ -13,7 +13,7 @@ export default class App extends React.Component {
   constructor() {
     super();
     global.SampleVar = 'This is Global Variable.';
-    global.url = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+    global.url = `http://192.168.43.68/point-of-sales/backend/web/v1/`;
     global.access_token = `oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`;
     //global.url = `http://192.168.43.216/delucent/backend/web/v1/`;
     //global.access_token = `oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`;
@@ -21,10 +21,10 @@ export default class App extends React.Component {
   }
 
   render() {
-    return (
-      <Provider store={createStoreWithMiddleware(reducers)}>
-        <RootStack />
-      </Provider>
-    );
+      return (
+        <Provider store={createStoreWithMiddleware(reducers)}>
+          <RootStack />
+        </Provider>
+      );
   }
 }

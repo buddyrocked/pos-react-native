@@ -1,0 +1,137 @@
+import React, { Component } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { login } from '../../actions';
+
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAlert: false,
+      route : 'Login',
+      username : '',
+      password : ''
+    };
+  };
+
+  userLogin(e){
+    this.props.onLogin(this.state.username, this.state.password);
+    e.preventDefault();
+  }
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
+
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {};
+  };
+
+  render() {
+    const {showAlert} = this.state;
+    return (
+      <View style={{ flex : 1, backgroundColor : '#ff5c63', }}>
+        <View style={{ flex : 1, alignItems : 'center', justifyContent : 'center' }}>
+          <MaterialCommunityIcons
+            name="credit-card-scan"
+            size={100}
+            color="#fff" />
+          <Text style={ styles.logoText }>{ 'POINT OF SALEX' }</Text>
+        </View>
+        <View style={{ flex : 2, padding : 5 }}>
+              <TextInput
+                 style={ styles.input }
+                 underlineColorAndroid={'transparent'}
+                 placeholder='Username'
+                 autoCapitalize='none'
+                 autoCorrect={false}
+                 autoFocus={true}
+                 keyboardType='email-address'
+                 value={this.state.username}
+                 onChangeText={(text) => this.setState({ username: text })} />
+
+              <TextInput
+                  style={ styles.input }
+                  underlineColorAndroid={'transparent'}
+                  placeholder='Password'
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => this.setState({ password: text })} />
+
+              <TouchableOpacity
+                accessible={ true }
+                style={{ flex : 1 }}
+                accessibilityLabel={ 'Process' }
+                onPress={ (e) => this.userLogin(e) } >
+                <View style={ styles.btnLogin }>
+                  <Text style={ styles.btnText }>
+                    <MaterialCommunityIcons name="check-circle-outline" size={24} color="#ff5c63" /> SIGN IN
+                  </Text>
+                </View>
+              </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLogin: (username, password) => { dispatch(login(username, password)); },
+    }
+}
+
+const styles = StyleSheet.create({
+  btnLogin : {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 10
+  },
+  btnText : {
+    fontSize:24,
+    color: '#ff5c63',
+    fontWeight: 'bold'
+  },
+  logoText : {
+    textAlign : 'center',
+    color : '#fff',
+    fontSize  : 24,
+    fontWeight : 'bold'
+  },
+  textMenu : {
+    fontSize : 12, color : '#222', marginTop : 10
+  },
+  iconMenu : {
+    flex : 1, alignItems : 'center', backgroundColor : '#fff', justifyContent : 'center', borderColor : '#fff', borderWidth : 1, margin: 5
+  },
+  input : {
+    borderColor : '#fff',
+    borderRadius : 5,
+    borderWidth : 1,
+    color : '#fff',
+    padding : 10,
+    marginBottom : 20
+  }
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

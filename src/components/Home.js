@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchHome } from '../actions';
+import { fetchHome, logout } from '../actions';
 
 class Home extends Component {
   constructor(props) {
@@ -29,7 +29,12 @@ class Home extends Component {
   };
 
   componentDidMount(){
-    this.props.fetchHome();
+    //this.props.fetchHome();
+  }
+
+  userLogout(e) {
+    this.props.onLogout();
+    e.preventDefault();
   }
 
   render() {
@@ -41,6 +46,7 @@ class Home extends Component {
           name="android"
           size={72}
           color="#fff" />
+          <Text>{`Welcome ${this.props.username}`}</Text>
         </View>
         <View style={{ flex : 2, backgroundColor : '#f0f0f0', padding : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
@@ -183,14 +189,14 @@ class Home extends Component {
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
+                onPress={(e) => this.userLogout(e)}>
                 <View style={ styles.iconMenu }>
                   <MaterialCommunityIcons
-                    name="tune"
+                    name="logout"
                     size={42}
                     color="#ff5c63" />
                   <Text
-                    style={ styles.textMenu }>{ 'Setting' }</Text>
+                    style={ styles.textMenu }>{ 'Logout' }</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -221,11 +227,20 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state){
-  return { home: state.home };
+const mapStateToProps = (state, ownProps) => {
+  return {
+    home: state.home,
+    username: state.auth.username
+  };
 }
 
-export default connect(mapStateToProps, { fetchHome })(Home);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLogout: () => { dispatch(logout()); }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
 const styles = StyleSheet.create({
   textMenu : {

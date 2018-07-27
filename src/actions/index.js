@@ -11,7 +11,10 @@ export const FETCH_CART      = 'fetch_cart';
 export const DELETE_CART     = 'delete_cart';
 export const CLEAR_CART      = 'clear_cart';
 
-const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+export const LOGIN           = 'login';
+export const LOGOUT          = 'logout';
+
+const ROOT_URL = `http://192.168.43.68/point-of-sales/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
@@ -26,6 +29,20 @@ export function fetchHome() {
   return {
     type: FETCH_HOME,
     payload: request
+  }
+}
+
+export const login = (username, password) => {
+  return {
+    type: LOGIN,
+    username: username,
+    password: password
+  }
+}
+
+export const logout = () => {
+  return {
+    type : LOGOUT
   }
 }
 
