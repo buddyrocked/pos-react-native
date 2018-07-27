@@ -169,7 +169,7 @@ const DrawerStack = createDrawerNavigator({
             </View>
           </View>
           <View style={{ flex : 1 }}>
-
+            <Text>{ 'Welcome' }</Text>
           </View>
         </View>
       </View>
