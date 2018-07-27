@@ -49,7 +49,7 @@ class Login extends Component {
             color="#fff" />
           <Text style={ styles.logoText }>{ 'POINT OF SALEX' }</Text>
         </View>
-        <View style={{ flex : 2, padding : 5 }}>
+        <View style={{ flex : 2, paddingLeft : 20, paddingRight : 20 }}>
               <TextInput
                  style={ styles.input }
                  underlineColorAndroid={'transparent'}

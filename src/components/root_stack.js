@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Alert, Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, Button, View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createMaterialTopTabNavigator, createDrawerNavigator  } from 'react-navigation';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -174,10 +174,30 @@ const DrawerStack = createDrawerNavigator({
         </View>
       </View>
       <View style={{ flex : 6 }}>
-        <Text>{ global.SampleVar }</Text>
+        <ScrollView>
+          <TouchableOpacity
+            style={{ flex : 1 }}
+            accessible={ true }
+            accessibilityLabel={ 'Tap Me' }
+            onPress={ ()=> props.navigation.navigate('Products') }>
+            <View style={ styles.menuItems }>
+              <View style={ styles.menuItemsIcon }>
+                <MaterialCommunityIcons
+                  name="cart-plus"
+                  size={24}
+                  color="#ff5c63" />
+              </View>
+              <View style={ styles.menuItemsTextContainer }>
+                <Text style={ styles.menuItemsText }>
+                    { 'Create Order' }
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
       <View style={{ flex : 1, backgroundColor : '#f0f0f0' }}>
-        <Text>Custom Header</Text>
+        <Text>Custom Footer</Text>
       </View>
     </View>
   )
@@ -195,7 +215,24 @@ const styles = StyleSheet.create({
     borderRadius : 50,
     height : 100,
     width : 100
-  }
+  },
+  menuItems : {
+    borderColor : '#f0f0f0',
+    borderBottomWidth : 1,
+    flex : 1,
+    flexDirection : 'row',
+    padding : 20,
+  },
+  menuItemsIcon : {
+    flex : 2,
+    alignItems : 'center'
+  },
+  menuItemsTextContainer : {
+    flex : 8,
+  },
+  menuItemsText : {
+    fontSize : 14,
+  },
 })
 
 class RootStacks extends Component {
