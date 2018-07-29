@@ -18,7 +18,12 @@ class Login extends Component {
   };
 
   userLogin(e){
-    this.props.onLogin(this.state.username, this.state.password);
+    const values = JSON.stringify({
+      username : this.state.username,
+      password : this.state.password
+    });
+
+    this.props.onLogin(values);
     e.preventDefault();
   }
 
@@ -90,13 +95,13 @@ class Login extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        isLoggedIn: state.auth.isLoggedIn
+        token: state.auth.token
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogin: (username, password) => { dispatch(login(username, password)); },
+        onLogin: (values) => { dispatch(login(values)); },
     }
 }
 

@@ -46,7 +46,7 @@ class Home extends Component {
           name="android"
           size={72}
           color="#fff" />
-          <Text>{`Welcome ${this.props.username}`}</Text>
+          <Text>{` `}</Text>
         </View>
         <View style={{ flex : 2, backgroundColor : '#f0f0f0', padding : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>

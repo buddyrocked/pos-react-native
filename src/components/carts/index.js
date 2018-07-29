@@ -6,42 +6,23 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import Placeholder from 'rn-placeholder';
 
-import { fetchCarts, deleteCart } from '../../actions';
+import { fetchCarts, deleteCart, clearCart } from '../../actions';
 
 class Carts extends Component {
   constructor(props){
     super(props);
-    this.removeCart = this.removeCart.bind(this);
     this.setCartId = this.setCartId.bind(this);
     this.state = { isReady : false, id : 0 };
   }
 
-  static clearCart = () => {
-    const url = global.url;
-    const access_token = global.access_token;
-
-    return fetch(`${url}carts/clear-cart?access-token=${access_token}`, {
-      method: 'DELETE'
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        dataSource : null
-      });
-    })
-    .catch((error) => {
-      Alert.alert(error.message);
-    });
-  }
-
   componentDidMount(){
-    this.props.fetchCarts();
+    this.props.onFetchCarts();
     this.setState({
       isReady : true,
     });
   }
 
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptionsx = ({ navigation }) => {
     const { params } = navigation.state;
 
     return {
@@ -59,19 +40,11 @@ class Carts extends Component {
           size={24}
           color="#ffffff"
           onPress={ () => {
-            const url = global.url;
-            const access_token = global.access_token;
-
-            return fetch(`${url}carts/clear-cart?access-token=${access_token}`, {
-              method: 'DELETE'
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              navigation.push('CartIndex');
-            })
-            .catch((error) => {
-              Alert.alert(error.message);
-              console.warn(JSON.stringify(error));
+            this.props.onClearCart(() => {
+              this.setState({
+                message : 'Done'
+              });
+              this.props.navigation.navigate('Products');
             });
           }}
         />
@@ -92,42 +65,19 @@ class Carts extends Component {
   };
 
   setCartId(id){
-    this.showAlert();
     this.setState({
       id: id
     });
+    this.showAlert();
   }
 
-  removeCart() {
-    const { id } = this.state;
-
-    this.props.deleteCart(id, () => {
-      this.setState({
-        message : 'Done'
-      });
-
-      this.props.navigation.navigate('Products');
-
+  eventDeleteCart(e){
+    this.props.onDeleteCart(this.state.id, () => {
+      this.props.onFetchCarts();
     });
 
-    /*const url = global.url;
-    const access_token = global.access_token;
-
-    return fetch(`${url}carts/${id}?access-token=${access_token}`, {
-      method: 'DELETE'
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.hideAlert();
-      this.props.navigation.navigate('Products');
-    })
-    .catch((error) => {
-      Alert.alert('error');
-      console.log(JSON.stringify(error));
-    });*/
+    e.preventDefault();
   }
-
-
 
   ListEmptyView = () => {
     return (
@@ -164,6 +114,7 @@ class Carts extends Component {
                   lineNumber={4}
                   lineSpacing={5}
                   lastLineWidth="30%"
+                  color="#d0d0d0"
                   onReady={this.state.isReady}
                 >
                   <View style={{ flex : 1, flexDirection : 'row' }}>
@@ -202,10 +153,11 @@ class Carts extends Component {
             lineNumber={2}
             textSize={16}
             lineSpacing={5}
-            color="#ff0000"
+            color="#d0d0d0"
             width="100%"
             lastLineWidth="90%"
             firstLineWidth="30%"
+            animate="fade"
             onReady={this.state.isReady}
             >
             <View style={{ flex : 1 }}>
@@ -213,21 +165,12 @@ class Carts extends Component {
               <Text style={ styles.actionSpell }><MaterialCommunityIcons name="volume-high" size={12} color="#ff5c63" /> { this.props.carts.terbilang }</Text>
             </View>
           </Placeholder.Paragraph>
-          <Placeholder.ImageContent
-            size={60}
-            animate="fade"
-            lineNumber={4}
-            lineSpacing={5}
-            lastLineWidth="30%"
-            onReady={this.state.isReady}
-          >
-            <View style={{ flex : 1 }}>
-              <Button
-                title="CHECKOUT"
-                color="#ff5c63"
-                onPress={ () => this.props.navigation.navigate('Cart') }/>
-            </View>
-          </Placeholder.ImageContent>
+          <View style={{ flex : 1, marginTop : 10 }}>
+            <Button
+              title="CHECKOUT"
+              color="#ff5c63"
+              onPress={ () => this.props.navigation.navigate('Cart') }/>
+          </View>
         </View>
         <AwesomeAlert
           show={this.state.showAlert}
@@ -244,8 +187,8 @@ class Carts extends Component {
           onCancelPressed={() => {
             this.hideAlert();
           }}
-          onConfirmPressed={() => {
-            this.removeCart();
+          onConfirmPressed={(e) => {
+            this.eventDeleteCart(e);
           }}
         />
       </View>
@@ -257,7 +200,15 @@ function mapStateToProps(state){
   return { carts: state.carts };
 }
 
-export default connect(mapStateToProps, { fetchCarts, deleteCart })(Carts);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onClearCart : (callback) => { dispatch(clearCart(callback)); },
+    onFetchCarts : () => { dispatch(fetchCarts()); },
+    onDeleteCart : (id, callback) => { dispatch(deleteCart(id, callback)); },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Carts);
 
 
 const styles = StyleSheet.create({

@@ -243,7 +243,7 @@ class RootStacks extends Component {
     };
   }
   render(){
-    if (this.props.isLoggedIn) {
+    if (this.props.token !== '') {
       return <DrawerStack />
     } else {
       return <Login />
@@ -253,7 +253,9 @@ class RootStacks extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        isLoggedIn: state.auth.isLoggedIn
+        token: state.auth.token,
+        username: state.auth.username,
+        user_id: state.auth.user_id,
     };
 }
 

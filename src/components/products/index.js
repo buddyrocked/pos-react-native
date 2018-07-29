@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import Placeholder from 'rn-placeholder';
 
-import { fetchProducts, createCart } from '../../actions';
+import { fetchProducts, createCart, getCart } from '../../actions';
 import prices from '../../data/products';
 
 const KEYS_TO_FILTERS = ['sku', 'name'];
@@ -62,37 +62,9 @@ class Products extends Component {
       value: param2,
     });
 
-    this.props.createCart(values, () => {
-      this.setState({
-        message : 'Done'
-      });
-      this.showAlert();
+    this.props.onCreateCart(values, () => {
+      Alert.alert('Product has add to cart.');
     });
-
-    /*const url = global.url;
-    const access_token = global.access_token;
-    return fetch(`${url}carts?access-token=${access_token}`, {
-      method: 'POST',
-      headers: {
-        'Accept'      : 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: param1,
-        value: param2,
-      }),
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        message : responseJson.message
-      });
-      this.showAlert();
-    })
-    .catch((error) => {
-      Alert.alert(error.message);
-      console.log(JSON.stringify(error));
-    });*/
   }
 
   ListEmptyView = () => {
@@ -102,7 +74,7 @@ class Products extends Component {
   }
 
   componentDidMount(){
-    this.props.fetchProducts(this.state.page);
+    this.props.onFetchProducts(this.state.page);
     let nextPage, currentPage;
     if(_.isEmpty(this.props.products)){
       nextPage = 2;
@@ -123,8 +95,8 @@ class Products extends Component {
     this.setState({
       isReady : false,
     });
-    
-    this.props.fetchProducts(page);
+
+    this.props.onFetchProducts(page);
 
     let nextPage, currentPage;
     if(_.isEmpty(this.props.products)){
@@ -168,6 +140,7 @@ class Products extends Component {
           <ScrollView>
             <FlatList
               data={ filteredData }
+              extraData={this.props}
               renderItem={ ({item}) =>
                 <View style={ styles.itemContainer }>
                   <Placeholder.ImageContent
@@ -270,7 +243,15 @@ function mapStateToProps(state){
   return { products: state.products };
 }
 
-export default connect(mapStateToProps, { fetchProducts, createCart })(Products);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onFetchProducts: (page) => { dispatch(fetchProducts(page)); },
+        onCreateCart: (values, callback) => { dispatch(createCart(values, callback)); },
+        //onGetCart: () => { dispatch(getCart()); }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);
 
 
 const styles = StyleSheet.create({

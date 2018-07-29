@@ -1,6 +1,7 @@
 import { LOGOUT, LOGIN } from '../actions';
 const defaultState = {
-  isLoggedIn : false,
+  token    : '',
+  user_id  : '',
   username : '',
   password : ''
 }
@@ -8,17 +9,15 @@ const defaultState = {
 export default function(state = defaultState, action){
   switch (action.type) {
       case LOGIN:
-          return Object.assign({}, state, {
-              isLoggedIn: true,
-              username: action.username,
-              password: action.password
-          });
+          return Object.assign({}, state, action.payload.data);
       case LOGOUT:
-          return Object.assign({}, state, {
-              isLoggedIn: false,
-              username: '',
-              password: ''
-          });
+          // return Object.assign({}, state, {
+          //     token: '',
+          //     user_id: '',
+          //     username: '',
+          //     password: ''
+          // });
+          return Object.assign({}, state, action.payload.data);
       default:
           return state;
   }
