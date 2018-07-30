@@ -11,7 +11,6 @@ const defaultState = {
 export default function(state = {}, action){
   switch(action.type){
   case CREATE_CART:
-    //return action.payload.data;
     return Object.assign({}, state, action.payload.data);
   default:
     return state;
