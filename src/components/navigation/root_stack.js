@@ -139,7 +139,7 @@ class RootStacks extends Component {
                   />
                 </View>
                 <View style={{ flex : 1, paddingRight:10 }}>
-                  <Text style={{ color : '#fff', fontSize : 18, fontWeight : 'bold' }}>{ this.props.cart_count }</Text>
+                  <Text style={{ color : '#fff', fontSize : 18, fontWeight : 'bold' }}>{ this.props.cart.count }</Text>
                 </View>
               </View>
             ),

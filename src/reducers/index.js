@@ -5,6 +5,7 @@ import ProductsReducer from './reducer_products';
 import CartsReducer from './reducer_carts';
 import AuthReducer from './reducer_auth';
 import CartReducer from './reducer_cart';
+import CreateCartReducer from './reducer_create_cart';
 
 const rootReducer = combineReducers({
   //state: (state = {}) => state,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   products: ProductsReducer,
   carts: CartsReducer,
   cart: CartReducer,
+  create_cart: CreateCartReducer,
   form: formReducer,
   auth: AuthReducer
 });

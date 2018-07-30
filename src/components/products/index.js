@@ -65,13 +65,12 @@ class Products extends Component {
     this.props.onCreateCart(values, () => {
       Alert.alert('Product has add to cart.');
       //this.props.onGetCart();
-      console.warn(this.props.cart_count);
     });
   }
 
   ListEmptyView = () => {
     return (
-        <Text style={{textAlign: 'center'}}> Cart Is Empty</Text>
+        <Text style={{textAlign: 'center'}}> Cart Is Empty </Text>
     );
   }
 
@@ -244,7 +243,7 @@ class Products extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     products: state.products,
-    cart_count: state.carts.count,
+    cart: state.create_cart,
   };
 }
 
