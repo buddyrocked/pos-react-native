@@ -139,7 +139,7 @@ class RootStacks extends Component {
                   />
                 </View>
                 <View style={{ flex : 1, paddingRight:10 }}>
-                  <Text style={{ color : '#fff', fontSize : 18, fontWeight : 'bold' }}>{ this.props.cart.count }</Text>
+                  <Text style={{ color : '#fff', fontSize : 18, fontWeight : 'bold' }}>{ this.props.cart_count }</Text>
                 </View>
               </View>
             ),
@@ -289,6 +289,9 @@ class RootStacks extends Component {
       )
     });
 
+
+    console.warn(this.props.token);
+
     if (this.props.token !== '') {
       return <DrawerStack />
     } else {
@@ -302,7 +305,8 @@ const mapStateToProps = (state, ownProps) => {
         token: state.auth.token,
         username: state.auth.username,
         user_id: state.auth.user_id,
-        cart : state.cart
+        cart : state.cart,
+        cart_count : state.cart.count
     };
 }
 

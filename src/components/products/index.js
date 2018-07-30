@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import Placeholder from 'rn-placeholder';
 
-import { fetchCarts, fetchProducts, createCart, getCart } from '../../actions';
+import { fetchProducts, createCart, getCart } from '../../actions';
 import prices from '../../data/products';
 
 const KEYS_TO_FILTERS = ['sku', 'name'];
@@ -38,34 +38,6 @@ class Products extends Component {
     products: []
   }
 
-  static navigationOptionsx = ({navigation}) => {
-    return {
-      title: 'PRODUCTS',
-      headerStyle: {
-        backgroundColor: '#ff5c63',
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
-      headerMode : 'float',
-      headerRight: (
-        <View style={{ flex : 1, flexDirection : 'row'}}>
-          <View style={{ flex : 1 }}>
-            <MaterialCommunityIcons
-              style={{ marginRight : 10 }}
-              name="cart-outline"
-              size={24}
-              color="#ffffff"
-              onPress={() => navigation.navigate('CartIndex')}
-            />
-          </View>
-          <View style={{ flex : 1, paddingRight:10 }}>
-            <Text style={{ color : '#fff', fontSize : 18, fontWeight : 'bold' }}>{ navigation.state.params.cart_count }</Text>
-          </View>
-        </View>
-      ),
-    }
-  }
-
   searchUpdated(term) {
     this.setState({
       searchTerm: term,
@@ -92,7 +64,8 @@ class Products extends Component {
 
     this.props.onCreateCart(values, () => {
       Alert.alert('Product has add to cart.');
-      this.props.onGetCartInfo();
+      //this.props.onGetCart();
+      console.warn(this.props.cart_count);
     });
   }
 
@@ -103,10 +76,6 @@ class Products extends Component {
   }
 
   componentDidMount(){
-    this.props.navigation.state.params.updateCartInfo();
-
-    this.props.onFetchCarts();
-
     this.props.onFetchProducts(this.state.page);
     let nextPage, currentPage;
     if(_.isEmpty(this.props.products)){
@@ -272,19 +241,18 @@ class Products extends Component {
   }
 }
 
-function mapStateToProps(state){
+const mapStateToProps = (state, ownProps) => {
   return {
     products: state.products,
-    carts: state.carts,
+    cart_count: state.cart.count,
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onFetchProducts: (page) => { dispatch(fetchProducts(page)); },
-        onFetchCarts: () => { dispatch(fetchCarts()); },
         onCreateCart: (values, callback) => { dispatch(createCart(values, callback)); },
-        onGetCartInfo: () => { dispatch(getCart()); }
+        onGetCart: () => { dispatch(getCart()); }
     }
 }
 
