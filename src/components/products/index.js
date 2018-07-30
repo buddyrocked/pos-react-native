@@ -244,7 +244,7 @@ class Products extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     products: state.products,
-    cart_count: state.cart.count,
+    cart_count: state.carts.count,
   };
 }
 

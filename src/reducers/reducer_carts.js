@@ -6,9 +6,10 @@ export default function(state = {}, action){
   case DELETE_CART:
     return _.omit(state, action.payload);
   case CLEAR_CART:
-      return _.omit(state, action.payload);
+    return _.omit(state, action.payload);
   case CREATE_CART:
-      return _.omit(state, action.payload);
+    //return _.omit(state, action.payload);
+    return Object.assign({}, state, action.payload.data);
   case FETCH_CART:
     return action.payload.data;
   case FETCH_CARTS:

@@ -289,9 +289,6 @@ class RootStacks extends Component {
       )
     });
 
-
-    console.warn(this.props.token);
-
     if (this.props.token !== '') {
       return <DrawerStack />
     } else {
