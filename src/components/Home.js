@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchHome, logout } from '../actions';
+import { getCart, fetchHome, logout } from '../actions';
 
 class Home extends Component {
   constructor(props) {
@@ -33,7 +33,9 @@ class Home extends Component {
   }
 
   userLogout(e) {
-    this.props.onLogout();
+    this.props.onLogout(() => {
+      this.props.onGetCart();
+    });
     e.preventDefault();
   }
 
@@ -236,7 +238,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogout: () => { dispatch(logout()); }
+        onLogout: (callback) => { dispatch(logout(callback)); },
+        onGetCart: () => { dispatch(getCart()); }
     }
 }
 

@@ -41,10 +41,8 @@ class Carts extends Component {
           color="#ffffff"
           onPress={ () => {
             this.props.onClearCart(() => {
-              this.setState({
-                message : 'Done'
-              });
-              this.props.navigation.navigate('Products');
+              Alert.alert('Shopping cart has empty.');
+              this.props.onFetchCarts();
             });
           }}
         />
@@ -74,6 +72,7 @@ class Carts extends Component {
   eventDeleteCart(e){
     this.props.onDeleteCart(this.state.id, () => {
       this.props.onFetchCarts();
+      this.hideAlert();
     });
 
     e.preventDefault();

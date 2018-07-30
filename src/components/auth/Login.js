@@ -52,7 +52,7 @@ class Login extends Component {
             name="credit-card-scan"
             size={100}
             color="#fff" />
-          <Text style={ styles.logoText }>{ 'POINT OF SALEX' }</Text>
+          <Text style={ styles.logoText }>{ 'POINT OF SALE' }</Text>
         </View>
         <View style={{ flex : 2, paddingLeft : 20, paddingRight : 20 }}>
               <TextInput

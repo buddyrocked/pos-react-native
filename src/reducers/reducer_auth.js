@@ -11,13 +11,13 @@ export default function(state = defaultState, action){
       case LOGIN:
           return Object.assign({}, state, action.payload.data);
       case LOGOUT:
-          // return Object.assign({}, state, {
-          //     token: '',
-          //     user_id: '',
-          //     username: '',
-          //     password: ''
-          // });
-          return Object.assign({}, state, action.payload.data);
+          return Object.assign({}, state, {
+               token: '',
+               user_id: '',
+               username: '',
+               password: ''
+          });
+          //return Object.assign({}, state, action.payload.data);
       default:
           return state;
   }

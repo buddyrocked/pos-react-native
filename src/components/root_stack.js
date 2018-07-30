@@ -111,7 +111,6 @@ const MainStack = createStackNavigator(
     },
     CartIndex : {
       screen: CartIndex,
-
     },
   },
   {

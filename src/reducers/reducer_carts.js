@@ -12,7 +12,8 @@ export default function(state = {}, action){
   case FETCH_CART:
     return action.payload.data;
   case FETCH_CARTS:
-    return action.payload.data;
+    //return action.payload.data;
+    return Object.assign({}, state, action.payload.data);
   default:
     return state;
   }

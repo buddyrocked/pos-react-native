@@ -12,7 +12,7 @@ import Touchables from '../Touchables';
 import CartIndex from '../carts/index';
 import Cart from '../carts/show';
 import Login from '../auth/Login';
-import { getCart, clearCart } from '../../actions';
+import { fetchCarts, getCart, clearCart } from '../../actions';
 
 const styles = StyleSheet.create({
   profileImageContainer : {
@@ -57,6 +57,10 @@ class RootStacks extends Component {
   componentDidMount(){
     this.props.onGetCart();
   }
+
+  updateCartInfo = () => {
+    this.props.onGetCart();
+  };
 
   render(){
     const MainStack = createStackNavigator(
@@ -187,7 +191,8 @@ class RootStacks extends Component {
                 color="#ffffff"
                 onPress={ () => {
                   this.props.onClearCart(() => {
-                    navigation.navigate('Carts');
+                    Alert.alert('Cart has been empty');
+                    this.props.onFetchCarts();
                   });
                 }}
               />
@@ -305,6 +310,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onClearCart : (callback) => { dispatch(clearCart(callback)); },
     onGetCart : () => { dispatch(getCart()); },
+    onFetchCarts : () => { dispatch(fetchCarts()); },
   }
 }
 
