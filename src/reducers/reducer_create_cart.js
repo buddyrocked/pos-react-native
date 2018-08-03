@@ -8,17 +8,18 @@ const defaultState = {
   terbilang  : '',
 }
 
-export default function(state = {}, action){
+export default function(state = defaultState, action){
   switch(action.type){
   case CREATE_CART:
-    //return Object.assign({}, state, action.payload.data);
-    return Object.assign({}, state, {
-      items      : [],
-      count      : 101,
-      total      : 0,
-      total_text : '',
-      terbilang  : '',
-    });
+    //console.warn(action.payload.data);
+    return Object.assign({}, state, action.payload.data);
+    // return Object.assign({}, state, {
+    //   items      : [],
+    //   count      : 101,
+    //   total      : 0,
+    //   total_text : '',
+    //   terbilang  : '',
+    // });
   default:
     return state;
   }

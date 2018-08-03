@@ -8,10 +8,10 @@ const defaultState = {
   terbilang  : '',
 }
 
-export default function(state = {}, action){
+export default function(state = defaultState, action){
   switch(action.type){
   case GET_CART:
-    //return action.payload.data;
+    //console.warn(action.payload.data);
     return Object.assign({}, state, action.payload.data);
   default:
     return state;

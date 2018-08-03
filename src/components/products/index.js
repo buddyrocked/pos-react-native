@@ -24,7 +24,7 @@ class Products extends Component {
     this.state = {
       visible : false,
       isReady : false,
-      id : 1,
+      id : 0,
       qty : 1,
       text : '',
       message : '',
@@ -58,32 +58,40 @@ class Products extends Component {
     });
   };
 
-  addToCart (param1, param2) {
+  openCart(productId){
     this.setState({
-      visible : true
+      visible : true,
+      id : productId
     });
-
-    // let values = JSON.stringify({
-    //   id: param1,
-    //   value: param2,
-    // });
-    //
-    // this.props.onCreateCart(values, () => {
-    //   Alert.alert('Product has add to cart.');
-    //   //this.props.onGetCart();
-    // });
-  }
-
-  ListEmptyView = () => {
-    return (
-        <Text style={{textAlign: 'center'}}> Cart Is Empty </Text>
-    );
   }
 
   updateQty = (qty) => {
     this.setState({
       qty : qty
     });
+  }
+
+  addToCart () {
+    let values = JSON.stringify({
+      id: this.state.id,
+      value: this.state.qty,
+    });
+
+    this.props.onCreateCart(values, () => {
+      Alert.alert('Product has add to cart.');
+      this.setState({
+        visible : false,
+        id : 0,
+        qty : 1,
+      });
+      //this.props.onGetCart();
+    });
+  }
+
+  ListEmptyView = () => {
+    return (
+        <Text style={{textAlign: 'center'}}> Cart Is Empty </Text>
+    );
   }
 
   componentDidMount(){
@@ -181,7 +189,7 @@ class Products extends Component {
                           style={{ flex : 1 }}
                           accessible={ true }
                           accessibilityLabel={ 'Tap Me' }
-                          onPress={ () => this.addToCart(item.id, 1) }>
+                          onPress={ () => this.openCart(item.id) }>
                           <View style={ styles.itemIcon }>
                             <MaterialCommunityIcons
                               name="cart-plus"
@@ -236,22 +244,33 @@ class Products extends Component {
           onRequestClose={() => this.setState({ visible: false })}>
           <View style={styles.slideContainer}>
             <View style={{ flex : 1 }}>
-              <TextInput style={ styles.inputQty } onChangeText={ qty => this.updateQty(qty) } placeholder='Qty' underlineColorAndroid={'transparent'} keyboardType='numeric' />
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Close cart' }
+                onPress={() => this.setState({visible: false})}>
+                <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
+                  <MaterialCommunityIcons
+                    name="close-circle-outline"
+                    size={30}
+                    color="#fff" />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex : 1 }}>
+              <TextInput value={`${this.state.qty}`} style={ styles.inputQty } onChangeText={ (qty) => this.updateQty(qty) } placeholder='Qty' underlineColorAndroid={'transparent'} keyboardType='numeric' />
             </View>
             <View style={{ flex : 1 }}>
               <TouchableOpacity
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'Add to cart' }
-                onPress={() => this.setState({visible: false})}>
+                onPress={() => this.addToCart()}>
                 <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
-                  <Text style={{ color : '#fff' }}>
-                    <MaterialCommunityIcons
-                      name="chevron-right"
-                      size={30}
-                      color="#fff" />
-                      Add
-                  </Text>
+                  <MaterialCommunityIcons
+                    name="plus-circle-outline"
+                    size={30}
+                    color="#fff" />
                 </View>
               </TouchableOpacity>
             </View>
@@ -361,6 +380,7 @@ const styles = StyleSheet.create({
     borderColor : '#666',
     borderRadius : 4,
     height : 60,
-    padding : 10
+    padding : 10,
+    textAlign : 'center'
   }
 });
