@@ -15,7 +15,7 @@ export const CLEAR_CART      = 'clear_cart';
 export const LOGIN           = 'login';
 export const LOGOUT          = 'logout';
 
-const ROOT_URL = `http://192.168.42.53/point-of-sales/backend/web/v1/`;
+const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 

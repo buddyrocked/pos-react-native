@@ -12,8 +12,8 @@ class Login extends Component {
     this.state = {
       showAlert: false,
       route : 'Login',
-      username : '',
-      password : ''
+      username : 'superadmin',
+      password : 'superadmin'
     };
   };
 
@@ -135,6 +135,12 @@ const styles = StyleSheet.create({
     color : '#fff',
     padding : 10,
     marginBottom : 20
+  },
+  slideContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

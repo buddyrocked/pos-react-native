@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { CREATE_CART } from '../actions';
 const defaultState = {
   items      : [],
-  count      : 0,
+  count      : 100,
   total      : 0,
   total_text : '',
   terbilang  : '',
@@ -14,7 +14,7 @@ export default function(state = {}, action){
     //return Object.assign({}, state, action.payload.data);
     return Object.assign({}, state, {
       items      : [],
-      count      : 100,
+      count      : 101,
       total      : 0,
       total_text : '',
       terbilang  : '',

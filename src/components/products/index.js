@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import Placeholder from 'rn-placeholder';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 
 import { fetchProducts, createCart, getCart } from '../../actions';
 import prices from '../../data/products';
@@ -21,6 +22,7 @@ class Products extends Component {
     this.addToCart = this.addToCart.bind(this);
     this.changePage = this.changePage.bind(this);
     this.state = {
+      visible : false,
       isReady : false,
       id : 1,
       qty : 1,
@@ -57,21 +59,31 @@ class Products extends Component {
   };
 
   addToCart (param1, param2) {
-    let values = JSON.stringify({
-      id: param1,
-      value: param2,
+    this.setState({
+      visible : true
     });
 
-    this.props.onCreateCart(values, () => {
-      Alert.alert('Product has add to cart.');
-      //this.props.onGetCart();
-    });
+    // let values = JSON.stringify({
+    //   id: param1,
+    //   value: param2,
+    // });
+    //
+    // this.props.onCreateCart(values, () => {
+    //   Alert.alert('Product has add to cart.');
+    //   //this.props.onGetCart();
+    // });
   }
 
   ListEmptyView = () => {
     return (
         <Text style={{textAlign: 'center'}}> Cart Is Empty </Text>
     );
+  }
+
+  updateQty = (qty) => {
+    this.setState({
+      qty : qty
+    });
   }
 
   componentDidMount(){
@@ -216,6 +228,35 @@ class Products extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <SlidingUpPanel
+          height={ 100 }
+          showBackdrop={ false }
+          draggableRange={{top: 175, bottom: 0}}
+          visible={this.state.visible}
+          onRequestClose={() => this.setState({ visible: false })}>
+          <View style={styles.slideContainer}>
+            <View style={{ flex : 1 }}>
+              <TextInput style={ styles.inputQty } onChangeText={ qty => this.updateQty(qty) } placeholder='Qty' underlineColorAndroid={'transparent'} keyboardType='numeric' />
+            </View>
+            <View style={{ flex : 1 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Add to cart' }
+                onPress={() => this.setState({visible: false})}>
+                <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
+                  <Text style={{ color : '#fff' }}>
+                    <MaterialCommunityIcons
+                      name="chevron-right"
+                      size={30}
+                      color="#fff" />
+                      Add
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SlidingUpPanel>
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}
@@ -243,7 +284,7 @@ class Products extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     products: state.products,
-    cart: state.create_cart,
+    cart_count: state.create_cart.count,
   };
 }
 
@@ -306,4 +347,20 @@ const styles = StyleSheet.create({
     fontSize : 16,
     fontWeight : 'bold'
   },
+  slideContainer: {
+    flex: 1,
+    flexDirection : 'row',
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding : 20
+  },
+  inputQty : {
+    backgroundColor : '#fff',
+    color : '#000',
+    borderColor : '#666',
+    borderRadius : 4,
+    height : 60,
+    padding : 10
+  }
 });
