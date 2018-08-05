@@ -61,7 +61,8 @@ class Products extends Component {
   openCart(productId){
     this.setState({
       visible : true,
-      id : productId
+      id : productId,
+      qty : 1
     });
   }
 
@@ -73,18 +74,16 @@ class Products extends Component {
 
   addToCart () {
     let values = JSON.stringify({
-      id: this.state.id,
-      value: this.state.qty,
+      id: parseInt(this.state.id),
+      value: parseInt(this.state.qty),
     });
 
     this.props.onCreateCart(values, () => {
-      Alert.alert('Product has add to cart.');
       this.setState({
         visible : false,
         id : 0,
         qty : 1,
       });
-      //this.props.onGetCart();
     });
   }
 
@@ -191,10 +190,7 @@ class Products extends Component {
                           accessibilityLabel={ 'Tap Me' }
                           onPress={ () => this.openCart(item.id) }>
                           <View style={ styles.itemIcon }>
-                            <MaterialCommunityIcons
-                              name="cart-plus"
-                              size={30}
-                              color="#ff5c63" />
+                            <Text style={{ color : '#fff' }}>BUY</Text>
                           </View>
                         </TouchableOpacity>
                       </View>
@@ -251,7 +247,7 @@ class Products extends Component {
                 onPress={() => this.setState({visible: false})}>
                 <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
                   <MaterialCommunityIcons
-                    name="close-circle-outline"
+                    name="chevron-down"
                     size={30}
                     color="#fff" />
                 </View>
@@ -303,15 +299,14 @@ class Products extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     products: state.products,
-    cart_count: state.create_cart.count,
+    create_cart : state.create_cart
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onFetchProducts: (page) => { dispatch(fetchProducts(page)); },
-        onCreateCart: (values, callback) => { dispatch(createCart(values, callback)); },
-        onGetCart: () => { dispatch(getCart()); }
+        onCreateCart: (values, callback) => { dispatch(createCart(values, callback)); }
     }
 }
 
@@ -322,7 +317,9 @@ const styles = StyleSheet.create({
   itemIcon : {
     justifyContent : 'center',
     alignItems : 'center',
-    flex : 1
+    backgroundColor : '#ff5c63',
+    borderRadius : 5,
+    height: 40
   },
   listContainer : {
     backgroundColor : '#fff',
@@ -357,6 +354,7 @@ const styles = StyleSheet.create({
   },
   itemAction : {
     flex : 1,
+    justifyContent : 'center'
   },
   input : {
     paddingTop : 20,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Alert } from 'react-native';
 
 export const FETCH_HOME      = 'fetch_home';
 
@@ -15,8 +16,8 @@ export const CLEAR_CART      = 'clear_cart';
 export const LOGIN           = 'login';
 export const LOGOUT          = 'logout';
 
-const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
-//const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
+//const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 export function fetchHome() {
@@ -75,7 +76,23 @@ export function fetchCarts() {
 
 export function createCart(values, callback){
   const request = axios.post(`${ROOT_URL}carts${API_KEY}`, values)
-    .then(() => callback());
+  .then((responseJson) => {
+    Alert.alert(responseJson.data.message);
+    callback();
+  });
+
+  return {
+    type: CREATE_CART,
+    payload: request
+  }
+}
+
+export function updateCart(id, values, callback){
+  const request = axios.put(`${ROOT_URL}carts/${id}${API_KEY}`, values)
+  .then((responseJson) => {
+    Alert.alert(responseJson.data.message);
+    callback();
+  });
 
   return {
     type: CREATE_CART,

@@ -13,8 +13,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     global.SampleVar = 'This is Global Variable.';
-    global.url = `http://192.168.42.53/point-of-sales/backend/web/v1/`;
-    //global.url = `http://192.168.43.216/delucent/backend/web/v1/`;
+    //global.url = `http://192.168.42.53/point-of-sales/backend/web/v1/`;
+    global.url = `http://192.168.43.216/delucent/backend/web/v1/`;
     global.access_token = `oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z`;
     this.state = { cartCount : 0 }
   }

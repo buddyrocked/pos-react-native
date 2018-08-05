@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import Placeholder from 'rn-placeholder';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 
 import { fetchCarts, deleteCart, clearCart } from '../../actions';
 
@@ -12,7 +13,7 @@ class Carts extends Component {
   constructor(props){
     super(props);
     this.setCartId = this.setCartId.bind(this);
-    this.state = { isReady : false, id : 0 };
+    this.state = { isReady : false, id : 0, visible : false, cart_qty : '1' };
   }
 
   componentDidMount(){
@@ -62,11 +63,23 @@ class Carts extends Component {
     });
   };
 
-  setCartId(id){
+  updateQty = (cart_qty) => {
     this.setState({
-      id: id
+      cart_qty : cart_qty
     });
-    this.showAlert();
+  }
+
+  setCartId(id, cart_qty){
+    this.setState({
+      visible : true,
+      id : id,
+      cart_qty : cart_qty
+    });
+
+    // this.setState({
+    //   id: id
+    // });
+    // this.showAlert();
   }
 
   eventDeleteCart(e){
@@ -132,10 +145,7 @@ class Carts extends Component {
                         accessibilityLabel={ 'Remove Cart' }
                         onPress={ () => this.setCartId(item.id) }>
                         <View style={ styles.itemIcon }>
-                          <MaterialCommunityIcons
-                            name="delete"
-                            size={18}
-                            color="#ff5c63" />
+                          <Text style={{ color : '#fff' }}>VIEW</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -165,12 +175,71 @@ class Carts extends Component {
             </View>
           </Placeholder.Paragraph>
           <View style={{ flex : 1, marginTop : 10 }}>
-            <Button
-              title="CHECKOUT"
-              color="#ff5c63"
-              onPress={ () => this.props.navigation.navigate('Cart') }/>
+            <TouchableOpacity
+              style={{ flex : 1 }}
+              accessible={ true }
+              accessibilityLabel={ 'Remove Cart' }
+              onPress={ () => this.props.navigation.navigate('Cart') }>
+              <View style={ styles.checkoutButton }>
+                <Text style={{ color : '#fff' }}>CHECKOUT</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
+        <SlidingUpPanel
+          height={ 100 }
+          showBackdrop={ false }
+          draggableRange={{top: 175, bottom: 0}}
+          visible={this.state.visible}
+          onRequestClose={() => this.setState({ visible: false })}>
+          <View style={styles.slideContainer}>
+            <View style={{ flex : 1 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Close cart' }
+                onPress={() => this.setState({visible: false})}>
+                <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
+                  <MaterialCommunityIcons
+                    name="close-circle-outline"
+                    size={30}
+                    color="#fff" />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex : 1 }}>
+              <TextInput value={ `${this.state.cart_qty}` } style={ styles.inputQty } onChangeText={ (cart_qty) => this.updateQty(cart_qty) } placeholder='Qty' underlineColorAndroid={'transparent'} keyboardType='numeric' />
+            </View>
+            <View style={{ flex : 1 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Add to cart' }
+                onPress={() => this.addToCart()}>
+                <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
+                  <MaterialCommunityIcons
+                    name="plus-circle-outline"
+                    size={30}
+                    color="#fff" />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex : 1 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'delete cart' }
+                onPress={() => this.addToCart()}>
+                <View style={{ backgroundColor : '#ff2e37', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
+                  <MaterialCommunityIcons
+                    name="delete"
+                    size={30}
+                    color="#fff" />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SlidingUpPanel>
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}
@@ -214,6 +283,15 @@ const styles = StyleSheet.create({
   itemIcon : {
     justifyContent : 'center',
     alignItems : 'center',
+    backgroundColor : '#ff5c63',
+    borderRadius : 5,
+    height: 40
+  },
+  checkoutButton : {
+    justifyContent : 'center',
+    alignItems : 'center',
+    backgroundColor : '#ff5c63',
+    borderRadius : 5,
     flex : 1
   },
   pageContainer : {
@@ -268,5 +346,22 @@ const styles = StyleSheet.create({
   },
   actionSpell : {
     color : '#333'
+  },
+  slideContainer: {
+    flex: 1,
+    flexDirection : 'row',
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding : 20
+  },
+  inputQty : {
+    backgroundColor : '#fff',
+    color : '#000',
+    borderColor : '#666',
+    borderRadius : 4,
+    height : 60,
+    padding : 10,
+    textAlign : 'center'
   }
 });
