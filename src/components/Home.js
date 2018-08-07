@@ -60,11 +60,11 @@ class Home extends Component {
                 onPress={ ()=> this.props.navigation.navigate('Products') }>
                 <View style={ styles.iconMenu }>
                   <MaterialCommunityIcons
-                    name="cart-plus"
+                    name="cart-outline"
                     size={42}
                     color="#ff5c63" />
                   <Text
-                    style={ styles.textMenu }>{ 'Cart' }</Text>
+                    style={ styles.textMenu }>{ 'Order' }</Text>
                 </View>
               </TouchableOpacity>
             </View>

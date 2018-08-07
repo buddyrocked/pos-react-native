@@ -49,7 +49,7 @@ class Login extends Component {
       <View style={{ flex : 1, backgroundColor : '#ff5c63', }}>
         <View style={{ flex : 1, alignItems : 'center', justifyContent : 'center' }}>
           <MaterialCommunityIcons
-            name="credit-card-scan"
+            name="desktop-classic"
             size={100}
             color="#fff" />
           <Text style={ styles.logoText }>{ 'POINT OF SALE' }</Text>
