@@ -180,10 +180,7 @@ export default class Cart extends Component {
             <View style={{ flex : 1 }}>
               <View style={ styles.cartInfoItemText }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
-                  <View style={{ flex : 1, justifyContent : 'center' }}>
-                    <MaterialCommunityIcons name="printer" size={48} color="#666" />
-                  </View>
-                  <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
+                  <View style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
                     <Switch value={ this.state.print } onValueChange={ this.toggleSwitchPrint } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Print" />
                   </View>
                 </View>
@@ -192,10 +189,7 @@ export default class Cart extends Component {
             <View style={{ flex : 1 }}>
               <View style={ styles.cartInfoItemText }>
                 <View style={{ flex : 1, flexDirection : 'row' }}>
-                  <View style={{ flex : 1, justifyContent : 'center' }}>
-                      <MaterialCommunityIcons name="account-check" size={48} color="#666" />
-                  </View>
-                  <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
+                  <View style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
                     <Switch value={ this.state.status } onValueChange={ this.toggleSwitchStatus } onTintColor="#999" thumbTintColor="#ff5c63" accessibilityLabel="Status" />
                   </View>
                 </View>
@@ -257,8 +251,8 @@ const styles = StyleSheet.create({
   cartInfoItemText : {
     flex:4,
     justifyContent: 'center',
-    paddingRight : 10,
-    paddingLeft : 10
+    paddingRight : 20,
+    paddingLeft : 20
   },
   cartAction : {
     flex : 1,
@@ -278,13 +272,13 @@ const styles = StyleSheet.create({
   cartInfoTextCenter : {
     fontWeight : 'bold',
     fontSize : 18,
-    textAlign : 'center'
+    textAlign : 'left'
   },
   cartInfoTextCenterRed : {
     color : '#ff5c63',
     fontWeight : 'bold',
     fontSize : 18,
-    textAlign : 'center'
+    textAlign : 'left'
   },
   cartQtyIcon: {
     flex : 4,
@@ -309,6 +303,6 @@ const styles = StyleSheet.create({
   smallLabel : {
     color : '#666',
     fontSize : 11,
-    textAlign : 'center'
+    textAlign : 'left'
   }
 })

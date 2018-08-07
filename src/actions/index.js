@@ -8,6 +8,7 @@ export const FETCH_PRODUCT   = 'fetch_product';
 
 export const FETCH_CARTS     = 'fetch_carts';
 export const CREATE_CART     = 'create_cart';
+export const UPDATE_CART     = 'update_cart';
 export const FETCH_CART      = 'fetch_cart';
 export const GET_CART        = 'get_cart';
 export const DELETE_CART     = 'delete_cart';
@@ -16,8 +17,8 @@ export const CLEAR_CART      = 'clear_cart';
 export const LOGIN           = 'login';
 export const LOGOUT          = 'logout';
 
-//const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
-const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
+const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+//const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 export function fetchHome() {
@@ -95,7 +96,7 @@ export function updateCart(id, values, callback){
   });
 
   return {
-    type: CREATE_CART,
+    type: UPDATE_CART,
     payload: request
   }
 }

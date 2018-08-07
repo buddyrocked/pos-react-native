@@ -7,13 +7,18 @@ import { connect } from 'react-redux';
 import Placeholder from 'rn-placeholder';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 
-import { fetchCarts, deleteCart, clearCart } from '../../actions';
+import { fetchCarts, deleteCart, clearCart, updateCart } from '../../actions';
 
 class Carts extends Component {
   constructor(props){
     super(props);
     this.setCartId = this.setCartId.bind(this);
-    this.state = { isReady : false, id : 0, visible : false, cart_qty : '1' };
+    this.state = {
+      isReady : false,
+      id : 0,
+      visible : false,
+      qty : 1
+    };
   }
 
   componentDidMount(){
@@ -63,31 +68,47 @@ class Carts extends Component {
     });
   };
 
-  updateQty = (cart_qty) => {
+  updateQty = (qty) => {
     this.setState({
-      cart_qty : cart_qty
+      qty : qty
     });
   }
 
-  setCartId(id, cart_qty){
+  updateCart () {
+    let values = JSON.stringify({
+      value: parseInt(this.state.qty),
+    });
+
+    this.props.onUpdateCart(this.state.id, values, () => {
+      this.setState({
+        visible : false,
+        id : 0,
+        qty : 1,
+      });
+      this.props.onFetchCarts();
+    });
+  }
+
+  setCartId(id, qty){
     this.setState({
       visible : true,
       id : id,
-      cart_qty : cart_qty
+      qty : qty
     });
+  }
 
-    // this.setState({
-    //   id: id
-    // });
-    // this.showAlert();
+  confirmDelete(){
+    this.showAlert();
   }
 
   eventDeleteCart(e){
     this.props.onDeleteCart(this.state.id, () => {
+      this.setState({
+        visible : false,
+      });
       this.props.onFetchCarts();
       this.hideAlert();
     });
-
     e.preventDefault();
   }
 
@@ -143,9 +164,9 @@ class Carts extends Component {
                         style={{ flex : 1 }}
                         accessible={ true }
                         accessibilityLabel={ 'Remove Cart' }
-                        onPress={ () => this.setCartId(item.id) }>
+                        onPress={ () => this.setCartId(item.id, item.quantity) }>
                         <View style={ styles.itemIcon }>
-                          <Text style={{ color : '#fff' }}>VIEW</Text>
+                          <Text style={{ color : '#fff' }}>EDIT</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -208,14 +229,14 @@ class Carts extends Component {
               </TouchableOpacity>
             </View>
             <View style={{ flex : 1 }}>
-              <TextInput value={ `${this.state.cart_qty}` } style={ styles.inputQty } onChangeText={ (cart_qty) => this.updateQty(cart_qty) } placeholder='Qty' underlineColorAndroid={'transparent'} keyboardType='numeric' />
+              <TextInput value={ `${this.state.qty}` } style={ styles.inputQty } onChangeText={ (qty) => this.updateQty(qty) } placeholder='Qty' underlineColorAndroid={'transparent'} keyboardType='numeric' />
             </View>
             <View style={{ flex : 1 }}>
               <TouchableOpacity
                 style={{ flex : 1 }}
                 accessible={ true }
-                accessibilityLabel={ 'Add to cart' }
-                onPress={() => this.addToCart()}>
+                accessibilityLabel={ 'update to cart' }
+                onPress={() => this.updateCart()}>
                 <View style={{ backgroundColor : '#ff5c63', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
                   <MaterialCommunityIcons
                     name="plus-circle-outline"
@@ -229,7 +250,7 @@ class Carts extends Component {
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'delete cart' }
-                onPress={() => this.addToCart()}>
+                onPress={() => this.confirmDelete()}>
                 <View style={{ backgroundColor : '#ff2e37', flex : 1, alignItems : 'center', justifyContent : 'center' }}>
                   <MaterialCommunityIcons
                     name="delete"
@@ -273,6 +294,7 @@ const mapDispatchToProps = (dispatch) => {
     onClearCart : (callback) => { dispatch(clearCart(callback)); },
     onFetchCarts : () => { dispatch(fetchCarts()); },
     onDeleteCart : (id, callback) => { dispatch(deleteCart(id, callback)); },
+    onUpdateCart: (id, values, callback) => { dispatch(updateCart(id, values, callback)); }
   }
 }
 
