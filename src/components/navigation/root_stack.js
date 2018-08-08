@@ -13,6 +13,7 @@ import CartIndex from '../carts/index';
 import Cart from '../carts/show';
 import Login from '../auth/Login';
 import ReportIndex from '../report/index';
+import BranchIndex from '../branch/index';
 import { fetchCarts, getCart, clearCart } from '../../actions';
 
 const styles = StyleSheet.create({
@@ -218,6 +219,31 @@ class RootStacks extends Component {
               </View>
             ),
           }),
+        },
+        BranchIndex : {
+          screen: BranchIndex,
+          navigationOptions: ({ navigation }) => ({
+            title: 'Branch Maps',
+            headerStyle: {
+              backgroundColor: '#ff5c63',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
+            headerMode : 'float',
+            headerRight: (
+              <View style={{ flex : 1, flexDirection : 'row'}}>
+                <View style={{ flex : 1 }}>
+                  <MaterialCommunityIcons
+                    style={{ marginRight : 10 }}
+                    name="cart-outline"
+                    size={24}
+                    color="#ffffff"
+                    onPress={() => navigation.navigate('CartIndex')}
+                  />
+                </View>
+              </View>
+            ),
+          }),
         }
       },
       {
@@ -380,7 +406,7 @@ class RootStacks extends Component {
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> props.navigation.navigate('Products') }>
+                onPress={ ()=> props.navigation.navigate('BranchIndex') }>
                 <View style={ styles.menuItems }>
                   <View style={ styles.menuItemsIcon }>
                     <MaterialCommunityIcons
