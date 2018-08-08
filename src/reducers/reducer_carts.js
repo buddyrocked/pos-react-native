@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FETCH_CARTS, FETCH_CART, DELETE_CART, CLEAR_CART, UPDATE_CART } from '../actions';
+import { FETCH_CARTS, FETCH_CART, DELETE_CART, CLEAR_CART, UPDATE_CART, SUBMIT_CART } from '../actions';
 
 const defaultState = {
   items      : [],
@@ -20,6 +20,8 @@ export default function(state = {}, action){
   case FETCH_CARTS:
     return Object.assign({}, state, action.payload.data);
   case UPDATE_CART:
+      return _.omit(state, action.payload);
+  case SUBMIT_CART:
       return _.omit(state, action.payload);
   default:
     return state;

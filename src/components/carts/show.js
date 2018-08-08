@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { Alert, Button, FlatList, ActivityIndicator, Image, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import _ from 'lodash';
+import { connect } from 'react-redux';
 
-export default class Cart extends Component {
+import { fetchCarts, submitCart } from '../../actions';
+
+class Cart extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -42,7 +46,7 @@ export default class Cart extends Component {
   };
 
   componentDidMount(){
-    const url = global.url;
+    /*const url = global.url;
     const access_token = global.access_token;
 
     return fetch(`${url}carts?access-token=${access_token}`)
@@ -63,6 +67,17 @@ export default class Cart extends Component {
       .catch((error) => {
         Alert.alert(error);
         console.log(error);
+      });*/
+
+      this.props.onFetchCarts();
+      this.setState({
+        isLoading : false,
+        carts : this.props.carts.items,
+        count : this.props.carts.count,
+        total : this.props.carts.total,
+        total_text : this.props.carts.total_text,
+        grand_total : this.props.carts.total,
+        pay   : this.props.carts.total
       });
   }
 
@@ -79,36 +94,23 @@ export default class Cart extends Component {
   }
 
   submit() {
-    const url = global.url;
-    const access_token = global.access_token;
-    return fetch(`${url}carts/submit?access-token=${access_token}`, {
-      method: 'POST',
-      headers: {
-        'Accept'      : 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        total : this.state.total,
-        grand_total : this.state.grand_total,
-        discount : this.state.discount,
-        tax : this.state.tax,
-        pay : this.state.pay,
-        change : this.state.change,
-        note : this.state.note,
-        customer_id : this.state.customer_id,
-        user_id : this.state.user_id,
-        print : this.state.print,
-        status : this.state.status
-      }),
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      Alert.alert(responseJson.message);
-      this.props.navigation.navigate('Home');
-    })
-    .catch((error) => {
-      Alert.alert(error.message);
-      console.log(JSON.stringify(error));
+    let values = JSON.stringify({
+      total : this.state.total,
+      grand_total : this.state.grand_total,
+      discount : this.state.discount,
+      tax : this.state.tax,
+      pay : this.state.pay,
+      change : this.state.change,
+      note : this.state.note,
+      customer_id : this.state.customer_id,
+      user_id : this.state.user_id,
+      print : this.state.print,
+      status : this.state.status
+    });
+
+    this.props.onSubmitCart(values, () => {
+      this.props.onFetchCarts();
+      this.props.navigation.navigate('CartIndex');
     });
   }
 
@@ -212,6 +214,21 @@ export default class Cart extends Component {
     );
   }
 }
+
+function mapStateToProps(state){
+  return {
+    carts : state.carts
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onFetchCarts : () => { dispatch(fetchCarts()); },
+    onSubmitCart: (values, callback) => { dispatch(submitCart(values, callback)); }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
 
 const styles = StyleSheet.create({
   cartContainer : {

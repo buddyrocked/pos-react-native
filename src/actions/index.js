@@ -9,6 +9,7 @@ export const FETCH_PRODUCT   = 'fetch_product';
 export const FETCH_CARTS     = 'fetch_carts';
 export const CREATE_CART     = 'create_cart';
 export const UPDATE_CART     = 'update_cart';
+export const SUBMIT_CART     = 'submit_cart';
 export const FETCH_CART      = 'fetch_cart';
 export const GET_CART        = 'get_cart';
 export const DELETE_CART     = 'delete_cart';
@@ -16,6 +17,8 @@ export const CLEAR_CART      = 'clear_cart';
 
 export const LOGIN           = 'login';
 export const LOGOUT          = 'logout';
+
+export const REPORT_INDEX     = 'report_index';
 
 const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
@@ -88,6 +91,19 @@ export function createCart(values, callback){
   }
 }
 
+export function submitCart(values, callback){
+  const request = axios.post(`${ROOT_URL}carts/submit${API_KEY}`, values)
+  .then((responseJson) => {
+    Alert.alert(responseJson.data.message);
+    callback();
+  });
+
+  return {
+    type: SUBMIT_CART,
+    payload: request
+  }
+}
+
 export function updateCart(id, values, callback){
   const request = axios.put(`${ROOT_URL}carts/${id}${API_KEY}`, values)
   .then((responseJson) => {
@@ -133,4 +149,12 @@ export function clearCart(callback) {
     type: CLEAR_CART,
     payload: request
   }
+}
+
+export function reportIndex() {
+  const request = axios.get(`${ROOT_URL}reports${API_KEY}`);
+  return {
+    type: REPORT_INDEX,
+    payload: request
+  };
 }

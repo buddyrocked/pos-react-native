@@ -12,6 +12,7 @@ import Touchables from '../Touchables';
 import CartIndex from '../carts/index';
 import Cart from '../carts/show';
 import Login from '../auth/Login';
+import ReportIndex from '../report/index';
 import { fetchCarts, getCart, clearCart } from '../../actions';
 
 const styles = StyleSheet.create({
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     borderBottomWidth : 1,
     flex : 1,
     flexDirection : 'row',
-    padding : 20,
+    padding : 18.7,
   },
   menuItemsIcon : {
     flex : 2,
@@ -193,6 +194,31 @@ class RootStacks extends Component {
             )
           })
         },
+        ReportIndex : {
+          screen: ReportIndex,
+          navigationOptions: ({ navigation }) => ({
+            title: 'SALES REPORT',
+            headerStyle: {
+              backgroundColor: '#ff5c63',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
+            headerMode : 'float',
+            headerRight: (
+              <View style={{ flex : 1, flexDirection : 'row'}}>
+                <View style={{ flex : 1 }}>
+                  <MaterialCommunityIcons
+                    style={{ marginRight : 10 }}
+                    name="cart-outline"
+                    size={24}
+                    color="#ffffff"
+                    onPress={() => navigation.navigate('CartIndex')}
+                  />
+                </View>
+              </View>
+            ),
+          }),
+        }
       },
       {
         initialRouteName : 'Home'
@@ -263,13 +289,108 @@ class RootStacks extends Component {
                 <View style={ styles.menuItems }>
                   <View style={ styles.menuItemsIcon }>
                     <MaterialCommunityIcons
-                      name="cart-plus"
+                      name="cart-outline"
                       size={24}
                       color="#ff5c63" />
                   </View>
                   <View style={ styles.menuItemsTextContainer }>
                     <Text style={ styles.menuItemsText }>
                         { 'Create Order' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> props.navigation.navigate('Products') }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="dropbox"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Stocks' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> props.navigation.navigate('ReportIndex') }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="chart-bar-stacked"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Sales Report' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> props.navigation.navigate('ReportIndex') }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="account-card-details"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Customers' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> props.navigation.navigate('Products') }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="cash-multiple"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Audit' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> props.navigation.navigate('Products') }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="google-maps"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Branch' }
                     </Text>
                   </View>
                 </View>

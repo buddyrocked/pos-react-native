@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native';
 import { LOGOUT, LOGIN } from '../actions';
 const defaultState = {
   token    : '',
@@ -17,7 +18,6 @@ export default function(state = defaultState, action){
                username: '',
                password: ''
           });
-          //return Object.assign({}, state, action.payload.data);
       default:
           return state;
   }

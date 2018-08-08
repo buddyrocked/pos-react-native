@@ -6,6 +6,7 @@ import CartsReducer from './reducer_carts';
 import AuthReducer from './reducer_auth';
 import CartReducer from './reducer_cart';
 import CreateCartReducer from './reducer_create_cart';
+import ReportReducer from './reducer_reports';
 
 const rootReducer = combineReducers({
   //state: (state = {}) => state,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   cart: CartReducer,
   create_cart: CreateCartReducer,
   form: formReducer,
-  auth: AuthReducer
+  auth: AuthReducer,
+  reports: ReportReducer
 });
 
 export default rootReducer;
