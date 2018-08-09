@@ -20,7 +20,7 @@ export const LOGOUT          = 'logout';
 
 export const REPORT_INDEX     = 'report_index';
 
-const ROOT_URL = `http://192.168.42.53/point-of-sales/backend/web/v1/`;
+const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
@@ -54,8 +54,8 @@ export const logout = (callback) => {
   }
 }
 
-export function fetchProducts(page = 1) {
-  const request = axios.get(`${ROOT_URL}prices${API_KEY}&expand=product&page=${page}`);
+export function fetchProducts(page = 1, term= 'pink') {
+  const request = axios.get(`${ROOT_URL}prices${API_KEY}&expand=product&page=${page}&term=${term}`);
   return {
     type: FETCH_PRODUCTS,
     payload: request

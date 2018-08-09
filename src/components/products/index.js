@@ -44,6 +44,8 @@ class Products extends Component {
     this.setState({
       searchTerm: term,
     });
+
+    this.props.onFetchProducts(1, this.state.searchTerm);
   }
 
   showAlert = () => {
@@ -94,7 +96,7 @@ class Products extends Component {
   }
 
   componentDidMount(){
-    this.props.onFetchProducts(this.state.page);
+    this.props.onFetchProducts(this.state.page, this.state.searchTerm);
     let nextPage, currentPage;
     if(_.isEmpty(this.props.products)){
       nextPage = 2;
@@ -114,9 +116,10 @@ class Products extends Component {
   changePage(page){
     this.setState({
       isReady : false,
+      page : page
     });
 
-    this.props.onFetchProducts(page);
+    this.props.onFetchProducts(page, this.state.searchTerm);
 
     let nextPage, currentPage;
     if(_.isEmpty(this.props.products)){
@@ -135,12 +138,7 @@ class Products extends Component {
   }
 
   render() {
-    let filteredData;
-    if(_.isEmpty(this.props.products)){
-      filteredData = [].filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-    }else{
-      filteredData = this.props.products.items.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-    }
+
 
     return(
       <View style={ styles.listContainer }>
@@ -152,14 +150,14 @@ class Products extends Component {
               color="#ff5c63" />
           </View>
           <View style={{ flex : 8 }}>
-            <SearchInput style={ styles.input } placeholder='Search Products' underlineColorAndroid={'transparent'}
-            onChangeText={(term) => { this.searchUpdated(term) }} />
+            <TextInput style={ styles.input } placeholder='Search Products' underlineColorAndroid={'transparent'}
+            onChangeText={ _.debounce((term) => { this.searchUpdated(term) }, 300) } />
           </View>
         </View>
         <View style={{ flex : 8 }}>
           <ScrollView>
             <FlatList
-              data={ filteredData }
+              data={ this.props.products.items }
               extraData={this.props}
               renderItem={ ({item}) =>
                 <View style={ styles.itemContainer }>
@@ -305,7 +303,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onFetchProducts: (page) => { dispatch(fetchProducts(page)); },
+        onFetchProducts: (page, term) => { dispatch(fetchProducts(page, term)); },
         onCreateCart: (values, callback) => { dispatch(createCart(values, callback)); }
     }
 }
