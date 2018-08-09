@@ -77,7 +77,7 @@ class RootStacks extends Component {
                 }),
               },
               BestSeller: {
-                screen: ListView,
+                screen: ReportIndex,
                 navigationOptions: ({ navigation }) => ({
                   title: 'Sale Today',
                   headerStyle: {

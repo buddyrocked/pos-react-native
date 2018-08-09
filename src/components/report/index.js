@@ -158,7 +158,8 @@ const styles = StyleSheet.create({
     fontWeight : 'bold'
   },
   itemInfoName : {
-    color : '#777'
+    color : '#777',
+    fontSize : 10
   },
   itemInfoPrice : {
     color : '#ff5c63',

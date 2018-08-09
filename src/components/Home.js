@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph
+} from 'react-native-chart-kit'
+
 import { getCart, fetchHome, logout } from '../actions';
 
 class Home extends Component {
@@ -44,11 +52,37 @@ class Home extends Component {
     return (
       <View style={{ flex : 1 }}>
         <View style={{ flex : 1, backgroundColor : '#ff5c63', alignItems : 'center', justifyContent : 'center' }}>
-        <MaterialCommunityIcons
-          name="android"
-          size={72}
-          color="#fff" />
-          <Text>{` `}</Text>
+          <LineChart
+            data={{
+              labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+              datasets: [{
+                data: [
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100
+                ]
+              }]
+            }}
+            width={Dimensions.get('window').width} // from react-native
+            height={220}
+            chartConfig={{
+              backgroundColor: '#ff5c63',
+              backgroundGradientFrom: '#ff5c638c',
+              backgroundGradientTo: '#fa1f298c',
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16
+              }
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />
         </View>
         <View style={{ flex : 2, backgroundColor : '#f0f0f0', padding : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
