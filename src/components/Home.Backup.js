@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
@@ -49,55 +49,94 @@ class Home extends Component {
 
   render() {
     const {showAlert} = this.state;
-    const grapWidth = Dimensions.get('window').width - 20;
     return (
-      <View style={{ flex : 1, backgroundColor : '#fff' }}>
-        <View style={{ flex : 1, backgroundColor : '#fff', alignItems : 'center', justifyContent : 'center', margin : 10  }}>
-          <View style={{ flex : 4 }}>
-            <LineChart
-              data={{
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                  data: [
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100
-                  ]
-                }]
-              }}
-              width={ grapWidth } // from react-native
-              height={240}
-              chartConfig={{
-                backgroundColor: '#fff',
-                backgroundGradientFrom: '#fc858a',
-                backgroundGradientTo: '#ff5c63',
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
-                  borderRadius: 0
-                }
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                borderRadius: 0
-              }}
-            />
-          </View>
+      <View style={{ flex : 1 }}>
+        <View style={{ flex : 1, backgroundColor : '#ff5c63', alignItems : 'center', justifyContent : 'center' }}>
+          <LineChart
+            data={{
+              labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+              datasets: [{
+                data: [
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100
+                ]
+              }]
+            }}
+            width={Dimensions.get('window').width} // from react-native
+            height={220}
+            chartConfig={{
+              backgroundColor: '#ff5c63',
+              backgroundGradientFrom: '#ff5c638c',
+              backgroundGradientTo: '#fa1f298c',
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16
+              }
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />
+        </View>
+        <View style={{ flex : 2, backgroundColor : '#f0f0f0', padding : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
             <View style={{ flex : 1 }}>
-              <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}>Order</Text>
-              <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}>63</Text>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> this.props.navigation.navigate('Products') }>
+                <View style={ styles.iconMenu }>
+                  <MaterialCommunityIcons
+                    name="cart-outline"
+                    size={42}
+                    color="#ff5c63" />
+                  <Text
+                    style={ styles.textMenu }>{ 'Order' }</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-            <View style={{ flex : 2 }}>
-              <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}>Transactions</Text>
-              <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}>Rp.7.850.000,-</Text>
+            <View style={{ flex : 1 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> {
+                  this.showAlert();
+                } }>
+                <View style={ styles.iconMenu }>
+                  <MaterialCommunityIcons
+                    name="dropbox"
+                    size={42}
+                    color="#ff5c63" />
+                  <Text
+                    style={ styles.textMenu }>{ 'Stock' }</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex : 1 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> this.props.navigation.navigate('Products') }>
+                <View style={ styles.iconMenu }>
+                  <MaterialCommunityIcons
+                    name="cash-multiple"
+                    size={42}
+                    color="#ff5c63" />
+                  <Text
+                    style={ styles.textMenu }>{ 'Audit' }</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
-        <View style={{ flex : 1, backgroundColor : '#f0f0f0', padding : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
             <View style={{ flex : 1 }}>
               <TouchableOpacity

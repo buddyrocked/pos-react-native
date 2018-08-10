@@ -138,8 +138,6 @@ class Products extends Component {
   }
 
   render() {
-
-
     return(
       <View style={ styles.listContainer }>
         <View style={{ flex : 1, flexDirection : 'row' }}>

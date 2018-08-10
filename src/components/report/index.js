@@ -60,6 +60,18 @@ class ReportIndex extends Component {
       filteredData = this.props.reports.items.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     }
 
+    if(this.props.reports.length == 0){
+      return(
+        <View style={{ flex : 1, padding : 20, justifyContent : 'center', alignItems : 'center' }}>
+          <MaterialCommunityIcons
+            name="cart-off"
+            size={72}
+            color="#ff5c63" />
+          <Text style={{textAlign: 'center'}}> There is no transactions for today.</Text>
+        </View>
+      );
+    }
+
     return(
       <View style={ styles.listContainer }>
         <View style={{ flex : 1, flexDirection : 'row' }}>
