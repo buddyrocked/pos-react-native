@@ -7,6 +7,7 @@ import AuthReducer from './reducer_auth';
 import CartReducer from './reducer_cart';
 import CreateCartReducer from './reducer_create_cart';
 import ReportReducer from './reducer_reports';
+import StoreReducer from './reducer_stores';
 
 const rootReducer = combineReducers({
   //state: (state = {}) => state,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   create_cart: CreateCartReducer,
   form: formReducer,
   auth: AuthReducer,
-  reports: ReportReducer
+  reports: ReportReducer,
+  stores: StoreReducer
 });
 
 export default rootReducer;

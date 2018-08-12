@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, FlatList, ActivityIndicator, Image, ScrollView, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Button, FlatList, ActivityIndicator, Image, ScrollView, StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import PropTypes from 'prop-types';
@@ -10,9 +10,12 @@ import Placeholder from 'rn-placeholder';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MapView, { Marker, Callout } from 'react-native-maps';
 
-import { reportIndex } from '../../actions';
+import { fetchStores, fetchStore } from '../../actions';
 
-const KEYS_TO_FILTERS = ['title', 'description'];
+const KEYS_TO_FILTERS = ['name', 'address'];
+
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 class BranchIndex extends Component {
 
@@ -22,38 +25,9 @@ class BranchIndex extends Component {
       visible    : false,
       isReady    : false,
       searchTerm : '',
-      markers : [
-        {
-          id: 1,
-          latlng: {
-            latitude: 37.78825,
-            longitude: -122.4324
-          },
-          title: 'Pondok Ranji',
-          description: 'This is test marker'
-        },
-        {
-          id: 2,
-          latlng: {
-            latitude: 37.78895,
-            longitude: -122.4394
-          },
-          title: 'Pondok Pinang',
-          description: 'This is test marker 1'
-        },
-        {
-          id: 3,
-          latlng: {
-            latitude: 37.78195,
-            longitude: -122.4194
-          },
-          title: 'Gunung Sindur',
-          description: 'This is test marker 2'
-        }
-      ],
       region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: 106.746802,
+        longitude: -6.283260,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
@@ -77,39 +51,8 @@ class BranchIndex extends Component {
     );
   }
 
-  regionContainingPoints(points) {
-    var minX, maxX, minY, maxY;
-
-    // init first point
-    ((point) => {
-      minX = point.latitude;
-      maxX = point.latitude;
-      minY = point.longitude;
-      maxY = point.longitude;
-    })(points[0]);
-
-    // calculate rect
-    points.map((point) => {
-      minX = Math.min(minX, point.latitude);
-      maxX = Math.max(maxX, point.latitude);
-      minY = Math.min(minY, point.longitude);
-      maxY = Math.max(maxY, point.longitude);
-    });
-
-    var midX = (minX + maxX) / 2;
-    var midY = (minY + maxY) / 2;
-    var midPoint = [midX, midY];
-
-    var deltaX = (maxX - minX);
-    var deltaY = (maxY - minY);
-
-    return {
-      latitude: midX, longitude: midY,
-      latitudeDelta: deltaX, longitudeDelta: deltaY,
-    };
-  }
-
   componentDidMount(){
+    this.props.onFetchStores();
 
     this.setState({
       isReady : true,
@@ -119,8 +62,8 @@ class BranchIndex extends Component {
   getInitialState() {
     return {
       region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: 106.746802,
+        longitude: -6.283260,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
@@ -133,13 +76,11 @@ class BranchIndex extends Component {
 
   render() {
     let filteredData;
-    if(_.isEmpty(this.state.markers)){
+    if(_.isEmpty(this.props.stores)){
       filteredData = [].filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     }else{
-      filteredData = this.state.markers.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+      filteredData = this.props.stores.items.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
     }
-
-    let regions = this.regionContainingPoints([{latitude: parseFloat(106.748596), longitude: parseFloat(-6.282944)}]);
 
     return(
       <View style={ styles.listContainer }>
@@ -158,20 +99,16 @@ class BranchIndex extends Component {
         <View style={{ flex : 8 }}>
           <MapView
             style={{ flex: 1 }}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
             customMapStyle={mapStyle}
-            region={this.state.region}
           >
             {filteredData.map(marker => (
               <Marker
-                coordinate={marker.latlng}
-                title={marker.title}
-                description={marker.description}
+                coordinate={{
+                  latitude: parseFloat(marker.latitude),
+                  longitude: parseFloat(marker.longitude)
+                }}
+                title={marker.name}
+                description={marker.address}
                 key={marker.id}
                 draggable
                 image={require('../../assets/images/home.png')}
@@ -214,13 +151,14 @@ class BranchIndex extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-
+    stores : state.stores
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+      onFetchStores : () => { dispatch(fetchStores()); },
+      onFetchCart : (id) => { dispatch(fetchStore(id)); }
     }
 }
 

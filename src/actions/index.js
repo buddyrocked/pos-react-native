@@ -20,8 +20,11 @@ export const LOGOUT          = 'logout';
 
 export const REPORT_INDEX     = 'report_index';
 
-const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
-//const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
+export const FETCH_STORES     = 'fetch_stores';
+export const FETCH_STORE      = 'fetch_store';
+
+//const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 export function fetchHome() {
@@ -155,6 +158,22 @@ export function reportIndex() {
   const request = axios.get(`${ROOT_URL}reports${API_KEY}`);
   return {
     type: REPORT_INDEX,
+    payload: request
+  };
+}
+
+export function fetchStores() {
+  const request = axios.get(`${ROOT_URL}stores${API_KEY}`);
+  return {
+    type: FETCH_STORES,
+    payload: request
+  };
+}
+
+export function fetchStore(id) {
+  const request = axios.get(`${ROOT_URL}stores/${id}${API_KEY}`);
+  return {
+    type: FETCH_STORE,
     payload: request
   };
 }

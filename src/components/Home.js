@@ -50,10 +50,18 @@ class Home extends Component {
   render() {
     const {showAlert} = this.state;
     const grapWidth = Dimensions.get('window').width - 20;
+    const data = [
+      { name: 'Seoul', population: 21500000, color: 'rgba(131, 167, 234, 1)', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+      { name: 'Toronto', population: 2800000, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+      { name: 'Beijing', population: 527612, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+      { name: 'New York', population: 8538000, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+      { name: 'Moscow', population: 11920000, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F, legendFontSize: 15' }
+    ];
+
     return (
-      <View style={{ flex : 1, backgroundColor : '#fff' }}>
-        <View style={{ flex : 1, backgroundColor : '#fff', alignItems : 'center', justifyContent : 'center', margin : 10  }}>
-          <View style={{ flex : 4 }}>
+      <ScrollView>
+      <View>
+        <View style={{ backgroundColor : '#fff', alignItems : 'center', margin : 10  }}>
             <LineChart
               data={{
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -81,90 +89,35 @@ class Home extends Component {
               }}
               bezier
               style={{
-                marginVertical: 8,
+                marginVertical: 0,
                 borderRadius: 0
               }}
             />
-          </View>
-          <View style={{ flex : 1, flexDirection : 'row' }}>
-            <View style={{ flex : 1 }}>
+          <View style={{ flexDirection : 'row' }}>
+            <View style={{ flex : 1, padding : 10 }}>
               <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}>Order</Text>
               <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}>63</Text>
             </View>
-            <View style={{ flex : 2 }}>
+            <View style={{ flex : 3, padding : 10 }}>
               <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}>Transactions</Text>
               <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}>Rp.7.850.000,-</Text>
             </View>
+            <View style={{ flex : 1, padding : 10 }}>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ ()=> this.props.navigation.navigate('Products') }>
+                <View style={{ flex : 1, backgroundColor : '#e0e0e0', borderRadius : 5, justifyContent: 'center' }}>
+                  <Text
+                    style={{ color:'#444', textAlign : 'center' }}>{ 'Refresh' }</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-        <View style={{ flex : 1, backgroundColor : '#f0f0f0', padding : 5 }}>
+        <View style={{ margin : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
-            <View style={{ flex : 1 }}>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
-                <View style={ styles.iconMenu }>
-                  <MaterialCommunityIcons
-                    name="chart-areaspline"
-                    size={42}
-                    color="#ff5c63" />
-                  <Text
-                    style={ styles.textMenu }>{ 'Sales Report' }</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex : 1 }}>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
-                <View style={ styles.iconMenu }>
-                  <MaterialCommunityIcons
-                    name="wallet"
-                    size={42}
-                    color="#ff5c63" />
-                  <Text
-                    style={ styles.textMenu }>{ 'Profit' }</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex : 1 }}>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
-                <View style={ styles.iconMenu }>
-                  <MaterialCommunityIcons
-                    name="twitch"
-                    size={42}
-                    color="#ff5c63" />
-                  <Text
-                    style={ styles.textMenu }>{ 'Message' }</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{ flex : 1, flexDirection : 'row' }}>
-            <View style={{ flex : 1 }}>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
-                <View style={ styles.iconMenu }>
-                  <MaterialCommunityIcons
-                    name="account-card-details"
-                    size={42}
-                    color="#ff5c63" />
-                  <Text
-                    style={ styles.textMenu }>{ 'Customers' }</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
             <View style={{ flex : 1 }}>
               <TouchableOpacity
                 style={{ flex : 1 }}
@@ -220,6 +173,7 @@ class Home extends Component {
           }}
         />
       </View>
+      </ScrollView>
     );
   }
 }

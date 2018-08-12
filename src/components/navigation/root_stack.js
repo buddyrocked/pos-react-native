@@ -14,7 +14,7 @@ import Cart from '../carts/show';
 import Login from '../auth/Login';
 import ReportIndex from '../report/index';
 import BranchIndex from '../branch/index';
-import { fetchCarts, getCart, clearCart } from '../../actions';
+import { fetchCarts, getCart, clearCart, logout } from '../../actions';
 
 const styles = StyleSheet.create({
   profileImageContainer : {
@@ -58,6 +58,13 @@ class RootStacks extends Component {
 
   componentDidMount(){
 
+  }
+
+  userLogout(e) {
+    this.props.onLogout(() => {
+      this.props.onGetCart();
+    });
+    e.preventDefault();
   }
 
   updateCartInfo = () => {
@@ -223,7 +230,7 @@ class RootStacks extends Component {
         BranchIndex : {
           screen: BranchIndex,
           navigationOptions: ({ navigation }) => ({
-            title: 'Branch Maps',
+            title: 'BRANCH LOCATION',
             headerStyle: {
               backgroundColor: '#ff5c63',
             },
@@ -368,25 +375,6 @@ class RootStacks extends Component {
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> props.navigation.navigate('ReportIndex') }>
-                <View style={ styles.menuItems }>
-                  <View style={ styles.menuItemsIcon }>
-                    <MaterialCommunityIcons
-                      name="account-card-details"
-                      size={24}
-                      color="#ff5c63" />
-                  </View>
-                  <View style={ styles.menuItemsTextContainer }>
-                    <Text style={ styles.menuItemsText }>
-                        { 'Customers' }
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
                 onPress={ ()=> props.navigation.navigate('Products') }>
                 <View style={ styles.menuItems }>
                   <View style={ styles.menuItemsIcon }>
@@ -417,6 +405,25 @@ class RootStacks extends Component {
                   <View style={ styles.menuItemsTextContainer }>
                     <Text style={ styles.menuItemsText }>
                         { 'Branch' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Tap Me' }
+                onPress={ (e) => this.userLogout(e) }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="logout"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Logout' }
                     </Text>
                   </View>
                 </View>
@@ -453,6 +460,7 @@ const mapDispatchToProps = (dispatch) => {
     onClearCart : (callback) => { dispatch(clearCart(callback)); },
     onGetCart : () => { dispatch(getCart()); },
     onFetchCarts : () => { dispatch(fetchCarts()); },
+    onLogout: (callback) => { dispatch(logout(callback)); },
   }
 }
 
