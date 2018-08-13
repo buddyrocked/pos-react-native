@@ -10,9 +10,17 @@ import {
   PieChart,
   ProgressChart,
   ContributionGraph
-} from 'react-native-chart-kit'
+} from 'react-native-chart-kit';
+import { VictoryBar, VictoryChart, VictoryPie, VictoryTheme } from "victory-native";
 
 import { getCart, fetchHome, logout } from '../actions';
+
+const dataVictory = [
+  { quarter: 1, earnings: 13000 },
+  { quarter: 2, earnings: 16500 },
+  { quarter: 3, earnings: 14250 },
+  { quarter: 4, earnings: 19000 }
+];
 
 class Home extends Component {
   constructor(props) {
@@ -55,7 +63,7 @@ class Home extends Component {
       { name: 'Toronto', population: 2800000, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
       { name: 'Beijing', population: 527612, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
       { name: 'New York', population: 8538000, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-      { name: 'Moscow', population: 11920000, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F, legendFontSize: 15' }
+      { name: 'Moscow', population: 11920000, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 }
     ];
 
     return (
@@ -116,39 +124,17 @@ class Home extends Component {
             </View>
           </View>
         </View>
-        <View style={{ margin : 5 }}>
+        <View style={{ margin : 10 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
             <View style={{ flex : 1 }}>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> this.props.navigation.navigate('Products') }>
-                <View style={ styles.iconMenu }>
-                  <MaterialCommunityIcons
-                    name="source-branch"
-                    size={42}
-                    color="#ff5c63" />
-                  <Text
-                    style={ styles.textMenu }>{ 'Branch' }</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex : 1 }}>
-              <TouchableOpacity
-                style={{ flex : 1 }}
-                accessible={ true }
-                accessibilityLabel={ 'Tap Me' }
-                onPress={(e) => this.userLogout(e)}>
-                <View style={ styles.iconMenu }>
-                  <MaterialCommunityIcons
-                    name="logout"
-                    size={42}
-                    color="#ff5c63" />
-                  <Text
-                    style={ styles.textMenu }>{ 'Logout' }</Text>
-                </View>
-              </TouchableOpacity>
+              <VictoryPie
+                width={150} height={150}
+                data={[
+                  { x: "1", y: 35 },
+                  { x: "2", y: 40 },
+                  { x: "3", y: 55 }
+                ]}
+                />
             </View>
           </View>
         </View>
