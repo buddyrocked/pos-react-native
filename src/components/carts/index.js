@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import Placeholder from 'rn-placeholder';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 
+import Loader from '../common/loader';
 import { fetchCarts, deleteCart, clearCart, updateCart } from '../../actions';
 
 class Carts extends Component {
@@ -17,7 +18,8 @@ class Carts extends Component {
       isReady : false,
       id : 0,
       visible : false,
-      qty : 1
+      qty : 1,
+      loading : false
     };
   }
 
@@ -75,6 +77,10 @@ class Carts extends Component {
   }
 
   updateCart () {
+    this.setState({
+      loading : true,
+    });
+
     let values = JSON.stringify({
       value: parseInt(this.state.qty),
     });
@@ -84,6 +90,7 @@ class Carts extends Component {
         visible : false,
         id : 0,
         qty : 1,
+        loading : false
       });
       this.props.onFetchCarts();
     });
@@ -102,9 +109,14 @@ class Carts extends Component {
   }
 
   eventDeleteCart(e){
+    this.setState({
+      loading : true,
+    });
+
     this.props.onDeleteCart(this.state.id, () => {
       this.setState({
         visible : false,
+        loading : false
       });
       this.props.onFetchCarts();
       this.hideAlert();
@@ -122,6 +134,8 @@ class Carts extends Component {
 
   render() {
 
+
+
     if(this.props.carts.count == 0){
       return(
         <View style={{ flex : 1, padding : 20, justifyContent : 'center', alignItems : 'center' }}>
@@ -136,6 +150,7 @@ class Carts extends Component {
 
     return(
       <View style={ styles.pageContainer }>
+        <Loader loading={this.state.loading} />
         <View style={ styles.listContainer }>
           <FlatList
             data={ this.props.carts.items }

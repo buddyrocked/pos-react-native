@@ -69,7 +69,7 @@ class Home extends Component {
     return (
       <ScrollView>
       <View>
-        <View style={{ backgroundColor : '#fff', alignItems : 'center', margin : 10  }}>
+        <View style={{ backgroundColor : '#fff', alignItems : 'center', margin : 10, marginBottom : 5  }}>
             <LineChart
               data={{
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -124,19 +124,50 @@ class Home extends Component {
             </View>
           </View>
         </View>
-        <View style={{ margin : 10 }}>
+        <View style={{ margin : 10, marginTop : 5 }}>
           <View style={{ flex : 1, flexDirection : 'row' }}>
-            <View style={{ flex : 1 }}>
-              <VictoryPie
-                width={150} height={150}
-                data={[
-                  { x: "1", y: 35 },
-                  { x: "2", y: 40 },
-                  { x: "3", y: 55 }
-                ]}
-                />
+            <View style={{ backgroundColor : '#fff', flex : 1, height : 80, alignItems : 'center', justifyContent : 'center', marginRight : 5, borderWidth : 1, borderColor : '#fff', borderRadius : 4 }}>
+              <Text style={{ fontSize : 36, color : '#ff5c63', fontWeight : 'bold' }}>100</Text>
+              <Text style={{ fontSize : 12, color : '#999' }}>Transactions</Text>
+            </View>
+            <View style={{ backgroundColor : '#fff', flex : 1, height : 80, alignItems : 'center', justifyContent : 'center', marginLeft : 5, borderWidth : 1, borderColor : '#fff', borderRadius : 4 }}>
+              <Text style={{ fontSize : 36, color : '#ff5c63', fontWeight : 'bold' }}>48</Text>
+              <Text style={{ fontSize : 12, color : '#999' }}>Orders</Text>
             </View>
           </View>
+        </View>
+        <View style={{ margin : 10, marginTop : 0 }}>
+          <BarChart
+            data={{
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+              datasets: [{
+                data: [
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100
+                ]
+              }]
+            }}
+            width={ grapWidth } // from react-native
+            height={170}
+            chartConfig={{
+              backgroundColor: '#fff',
+              backgroundGradientFrom: '#ff5c63',
+              backgroundGradientTo: '#fc858a',
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 0
+              }
+            }}
+            style={{
+              marginVertical: 0,
+              borderRadius: 0,
+              height : 170
+            }}
+            />
         </View>
         <AwesomeAlert
           show={showAlert}

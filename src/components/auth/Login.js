@@ -5,6 +5,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { login } from '../../actions';
+import Loader from '../common/loader';
 
 class Login extends Component {
   constructor(props) {
@@ -13,17 +14,23 @@ class Login extends Component {
       showAlert: false,
       route : 'Login',
       username : 'superadmin',
-      password : 'superadmin'
+      password : 'superadmin',
+      loading  : false,
     };
   };
 
   userLogin(e){
+    this.setState({
+      loading : true,
+    });
+
     const values = JSON.stringify({
       username : this.state.username,
       password : this.state.password
     });
 
     this.props.onLogin(values);
+
     e.preventDefault();
   }
 
@@ -47,6 +54,7 @@ class Login extends Component {
     const {showAlert} = this.state;
     return (
       <View style={{ flex : 1, backgroundColor : '#ff5c63', }}>
+        <Loader loading={this.state.loading} />
         <View style={{ flex : 1, alignItems : 'center', justifyContent : 'center' }}>
           <MaterialCommunityIcons
             name="desktop-classic"

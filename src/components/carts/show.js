@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
+import Loader from '../common/loader';
 import { fetchCarts, submitCart } from '../../actions';
 
 class Cart extends Component {
@@ -23,7 +24,8 @@ class Cart extends Component {
       customer_id : 1,
       user_id : 1,
       print : true,
-      status : true
+      status : true,
+      loading : false
     }
   }
 
@@ -94,6 +96,10 @@ class Cart extends Component {
   }
 
   submit() {
+    this.setState({
+      loading : true
+    });
+
     let values = JSON.stringify({
       total : this.state.total,
       grand_total : this.state.grand_total,
@@ -126,6 +132,7 @@ class Cart extends Component {
 
     return(
       <View style={ styles.cartContainer }>
+        <Loader loading={this.state.loading} />
         <View style={ styles.cartHeader }>
           <MaterialCommunityIcons
             name="arrow-left-thick"

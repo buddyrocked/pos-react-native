@@ -14,6 +14,8 @@ import Cart from '../carts/show';
 import Login from '../auth/Login';
 import ReportIndex from '../report/index';
 import BranchIndex from '../branch/index';
+import Chart from '../common/chart';
+
 import { fetchCarts, getCart, clearCart, logout } from '../../actions';
 
 const styles = StyleSheet.create({
@@ -251,7 +253,7 @@ class RootStacks extends Component {
               </View>
             ),
           }),
-        }
+        },
       },
       {
         initialRouteName : 'Home'

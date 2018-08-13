@@ -11,6 +11,7 @@ import SlidingUpPanel from 'rn-sliding-up-panel';
 
 import { fetchProducts, createCart, getCart } from '../../actions';
 import prices from '../../data/products';
+import Loader from '../common/loader';
 
 const KEYS_TO_FILTERS = ['sku', 'name'];
 
@@ -33,6 +34,7 @@ class Products extends Component {
       page : 1,
       nextPage : 1,
       previousPage : 1,
+      loading : false
     }
   }
 
@@ -75,6 +77,10 @@ class Products extends Component {
   }
 
   addToCart () {
+    this.setState({
+      loading : true,
+    });
+
     let values = JSON.stringify({
       id: parseInt(this.state.id),
       value: parseInt(this.state.qty),
@@ -85,6 +91,7 @@ class Products extends Component {
         visible : false,
         id : 0,
         qty : 1,
+        loading : false
       });
     });
   }
@@ -116,7 +123,8 @@ class Products extends Component {
   changePage(page){
     this.setState({
       isReady : false,
-      page : page
+      page : page,
+      loading : true
     });
 
     this.props.onFetchProducts(page, this.state.searchTerm);
@@ -133,13 +141,15 @@ class Products extends Component {
     this.setState({
       isReady : true,
       nextPage : nextPage,
-      previousPage : previousPage
+      previousPage : previousPage,
+      loading : true
     });
   }
 
   render() {
     return(
       <View style={ styles.listContainer }>
+        <Loader loading={this.state.loading} />
         <View style={{ flex : 1, flexDirection : 'row' }}>
           <View style={{ flex : 2, justifyContent : 'center', alignItems : 'center' }}>
             <MaterialCommunityIcons
