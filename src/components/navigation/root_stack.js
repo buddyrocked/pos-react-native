@@ -339,7 +339,7 @@ class RootStacks extends Component {
                 style={{ flex : 1 }}
                 accessible={ true }
                 accessibilityLabel={ 'Tap Me' }
-                onPress={ ()=> props.navigation.navigate('Products') }>
+                onPress={ ()=> props.navigation.navigate('Chart') }>
                 <View style={ styles.menuItems }>
                   <View style={ styles.menuItemsIcon }>
                     <MaterialCommunityIcons

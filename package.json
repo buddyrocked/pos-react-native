@@ -30,6 +30,7 @@
     "react-native-chart": "^1.0.8-beta",
     "react-native-chart-kit": "^1.1.5",
     "react-native-drawer": "^2.5.0",
+    "react-native-floating-action": "^1.13.0",
     "react-native-maps": "^0.21.0",
     "react-native-search-filter": "^0.1.4",
     "react-native-svg": "^6.5.2",
