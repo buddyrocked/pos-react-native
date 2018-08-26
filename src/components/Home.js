@@ -11,9 +11,8 @@ import {
   ProgressChart,
   ContributionGraph
 } from 'react-native-chart-kit';
-import { VictoryBar, VictoryChart, VictoryPie, VictoryTheme, VictoryLine } from "victory-native";
 import { FloatingAction } from 'react-native-floating-action';
-
+import { LineChart as LineChartSvg, Grid } from 'react-native-svg-charts';
 import { getCart, fetchHome, logout } from '../actions';
 
 const dataVictory = [
@@ -22,6 +21,8 @@ const dataVictory = [
   { quarter: 3, earnings: 14250 },
   { quarter: 4, earnings: 19000 }
 ];
+
+const dataChart = [ 50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80 ];
 
 class Home extends Component {
   constructor(props) {
@@ -113,12 +114,12 @@ class Home extends Component {
                 />
               <View style={{ flexDirection : 'row' }}>
                 <View style={{ flex : 1, padding : 10 }}>
-                  <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}>Order</Text>
-                  <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}>63</Text>
+                  <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}></Text>
+                  <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}></Text>
                 </View>
                 <View style={{ flex : 3, padding : 10 }}>
-                  <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}>Transactions</Text>
-                  <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}>Rp.7.850.000,-</Text>
+                  <Text style={{ fontSize : 10, color : '#666', textAlign : 'center' }}></Text>
+                  <Text style={{ fontSize : 14, color : '#333', fontWeight : 'bold', textAlign : 'center' }}></Text>
                 </View>
                 <View style={{ flex : 1, padding : 10 }}>
                   <TouchableOpacity
@@ -126,9 +127,9 @@ class Home extends Component {
                     accessible={ true }
                     accessibilityLabel={ 'Tap Me' }
                     onPress={ ()=> this.props.navigation.navigate('Products') }>
-                    <View style={{ flex : 1, backgroundColor : '#e0e0e0', borderRadius : 5, justifyContent: 'center' }}>
+                    <View style={{ flex : 1, backgroundColor : '#fff', borderRadius : 5, height : 30, justifyContent: 'center', borderColor : '#ff5c63', borderWidth : 1 }}>
                       <Text
-                        style={{ color:'#444', textAlign : 'center' }}>{ 'Refresh' }</Text>
+                        style={{ color:'#ff5c63', textAlign : 'center', fontSize : 12 }}>{ 'Refresh' }</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -137,49 +138,25 @@ class Home extends Component {
             <View style={{ margin : 10, marginTop : 5 }}>
               <View style={{ flex : 1, flexDirection : 'row' }}>
                 <View style={{ backgroundColor : '#fff', flex : 1, flexDirection : 'row', height : 80, alignItems : 'center', justifyContent : 'center', marginRight : 5, borderWidth : 1, borderColor : '#fff', borderRadius : 4 }}>
-                  <View style={{ flex : 1, justifyContent : 'center', alignItems : 'center' }}>
+                  <View style={{ flex : 1, height : 80, justifyContent : 'center', alignItems : 'center', backgroundColor : '#ff5c63' }}>
                     <MaterialCommunityIcons
                       name="cart-outline"
                       size={30}
-                      color="#999" />
+                      color="#fff" />
                   </View>
-                  <View style={{ flex : 2 }}>
+                  <View style={{ flex : 2, alignItems : 'center' }}>
                     <Text style={{ fontSize : 36, color : '#ff5c63', fontWeight : 'bold' }}>100</Text>
-                    <Text style={{ fontSize : 12, color : '#999' }}>Transactions</Text>
+                    <Text style={{ fontSize : 12, color : '#999' }}>Order this month</Text>
                   </View>
                 </View>
                 <View style={{ backgroundColor : '#fff', flex : 1, flexDirection : 'row', height : 80, alignItems : 'center', justifyContent : 'center', marginLeft : 5, borderWidth : 1, borderColor : '#fff', borderRadius : 4 }}>
-                  <LineChart
-                    data={{
-                      labels: ['1', '2', '3', '4', '5', '6'],
-                      datasets: [{
-                        data: [
-                          Math.random() * 10,
-                          Math.random() * 10,
-                          Math.random() * 10,
-                          Math.random() * 10,
-                          Math.random() * 10,
-                          Math.random() * 10
-                        ]
-                      }]
-                    }}
-                    width={120}
-                    height={80}
-                    chartConfig={{
-                      backgroundColor: '#fff',
-                      backgroundGradientFrom: '#fff',
-                      backgroundGradientTo: '#fff',
-                      color: '(opacity = 1) => `#f0f0f0`',
-                      style: {
-                        borderRadius: 0
-                      }
-                    }}
-                    style={{
-                      marginVertical: 0,
-                      borderRadius: 0,
-                      flex : 1
-                    }}
-                  />
+                  <LineChartSvg
+                      style={{ height: 80 }}
+                      data={ dataChart }
+                      svg={{ stroke: 'rgb(134, 65, 244)' }}
+                      contentInset={{ top: 20, bottom: 20 }}>
+                      <Grid/>
+                  </LineChartSvg>
                 </View>
               </View>
             </View>
