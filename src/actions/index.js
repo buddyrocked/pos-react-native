@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Alert } from 'react-native';
+import { Alert, AsyncStorage } from 'react-native';
 
 export const FETCH_HOME      = 'fetch_home';
 
@@ -23,8 +23,8 @@ export const REPORT_INDEX     = 'report_index';
 export const FETCH_STORES     = 'fetch_stores';
 export const FETCH_STORE      = 'fetch_store';
 
-//const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
-const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
+const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+//const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 const API_KEY = '?access-token=oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 
 export function fetchHome() {
@@ -39,8 +39,21 @@ export function fetchHome() {
   }
 }
 
-export const login = (values) => {
+export const login = (values, callback) => {
   const request = axios.post(`${ROOT_URL}auth/login`, values);
+
+  console.warn(request.data);
+
+  axios.post(`${ROOT_URL}auth/login`, values)
+  .then((responseJson) => {
+    if(responseJson.data.token != '') {
+      AsyncStorage.setItem('@app:token', responseJson.data.token);
+      callback();
+    } else {
+      Alert.alert(responseJson.data.message);
+      callback();
+    }
+  });
 
   return {
     type: LOGIN,
@@ -49,8 +62,7 @@ export const login = (values) => {
 }
 
 export const logout = (callback) => {
-  const request = axios.get(`${ROOT_URL}auth/logout`)
-                  .then(() => callback());
+  const request = axios.get(`${ROOT_URL}auth/logout`).then(() => callback());
   return {
     type : LOGOUT,
     payload: request

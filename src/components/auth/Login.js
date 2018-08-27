@@ -29,7 +29,11 @@ class Login extends Component {
       password : this.state.password
     });
 
-    this.props.onLogin(values);
+    this.props.onLogin(values, ()=>{
+      this.setState({
+        loading : false,
+      });
+    });
 
     e.preventDefault();
   }
@@ -109,7 +113,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogin: (values) => { dispatch(login(values)); },
+        onLogin: (values, callback) => { dispatch(login(values, callback)); },
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Alert, Button, View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, Button, View, ScrollView, StyleSheet, Text, TouchableOpacity, AsyncStorage } from 'react-native';
 import { createStackNavigator, createMaterialTopTabNavigator, createDrawerNavigator  } from 'react-navigation';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -65,6 +65,7 @@ class RootStacks extends Component {
   userLogout(e) {
     this.props.onLogout(() => {
       this.props.onGetCart();
+      AsyncStorage.removeItem('@app:token');
     });
     e.preventDefault();
   }
@@ -452,8 +453,6 @@ const mapStateToProps = (state, ownProps) => {
         token: state.auth.token,
         username: state.auth.username,
         user_id: state.auth.user_id,
-        //cart : state.cart,
-        //cart_count : state.cart.count
     };
 }
 
