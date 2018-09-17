@@ -65,7 +65,7 @@ class RootStacks extends Component {
   userLogout(e) {
     this.props.onLogout(() => {
       this.props.onGetCart();
-      AsyncStorage.removeItem('@app:token');
+      AsyncStorage.removeItem('user_token');
     });
     e.preventDefault();
   }

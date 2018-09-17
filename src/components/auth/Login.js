@@ -107,7 +107,7 @@ class Login extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        token: state.auth.token
+        //token: state.auth.token
     };
 }
 

@@ -45,7 +45,7 @@ class ReportIndex extends Component {
   }
 
   componentDidMount(){
-    this.props.onReportIndex();
+    //this.props.onReportIndex();
 
     this.setState({
       isReady : true,
