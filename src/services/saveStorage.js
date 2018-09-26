@@ -7,7 +7,7 @@ const saveStorage = {
               .then(
                 () => AsyncStorage.getItem(key)
                 .then(
-                  (result)=> {/*console.warn(result)*/}
+                  (result)=> { alert(result) }
                 )
             );
     } catch (error) {
