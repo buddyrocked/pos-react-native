@@ -12,7 +12,7 @@ class Login extends Component {
     super(props);
     this.state = {
       showAlert: false,
-      route : 'Login',
+      route    : 'Login',
       username : 'superadmin',
       password : 'superadmin',
       loading  : false,
@@ -29,7 +29,7 @@ class Login extends Component {
       password : this.state.password
     });
 
-    this.props.onLogin(values, ()=>{
+    this.props.onLogin(values, () => {
       this.setState({
         loading : false,
       });

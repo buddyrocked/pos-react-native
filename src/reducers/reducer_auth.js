@@ -1,4 +1,3 @@
-import { AsyncStorage } from 'react-native';
 import { LOGOUT, LOGIN } from '../actions';
 const defaultState = {
   token    : '',

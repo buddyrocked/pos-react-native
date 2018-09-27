@@ -25,10 +25,10 @@ export const REPORT_INDEX     = 'report_index';
 export const FETCH_STORES     = 'fetch_stores';
 export const FETCH_STORE      = 'fetch_store';
 
-const ROOT_URL = `http://192.168.20.169/point-of-sales/backend/web/v1/`;
+const ROOT_URL = `http://192.168.20.250/point-of-sales/backend/web/v1/`;
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
 //const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
-//const ACCESS_TOKEN = 'oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
+const ACCESS_TOKEN = 'oSIuEDLQ9Qg0j32Acp69_ofAzZtACq2z';
 //const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
 export function fetchHome() {
@@ -49,7 +49,6 @@ export const login = (values, callback) => {
   axios.post(`${ROOT_URL}auth/login`, values)
   .then((responseJson) => {
     if(responseJson.data.token != '') {
-      saveStorage.saveItem('user_token', responseJson.data.token);
       callback();
     } else {
       Alert.alert(responseJson.data.message);
@@ -71,19 +70,22 @@ export const logout = (callback) => {
   }
 }
 
-export function fetchProducts(page = 1, term= 'pink') {
-  const ACCESS_TOKEN = await deviceStorage.getStorage('user_token');
-  const API_KEY = `?access-token=${ACCESS_TOKEN}`;
+export const fetchProducts = (page = 1, term= 'pink') => async (dispatch, getState) => {
+  try {
+    const TOKEN = getState().auth.token;
+    const API_KEY = `?access-token=${TOKEN}`;
 
-  const request = axios.get(`${ROOT_URL}prices${API_KEY}&expand=product&page=${page}&term=${term}`);
-  return {
-    type: FETCH_PRODUCTS,
-    payload: request
-  };
+    let request = await axios.get(`${ROOT_URL}prices${API_KEY}&expand=product&page=${page}&term=${term}`);
+    dispatch({ type: FETCH_PRODUCTS, payload: request });
+
+    //return { type: FETCH_PRODUCTS, payload: request };
+  }catch(e){
+    console.log(e)
+  }
+
 }
 
 export function fetchProduct(id) {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}products/${id}${API_KEY}`);
@@ -94,7 +96,6 @@ export function fetchProduct(id) {
 }
 
 export function fetchCarts() {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}carts${API_KEY}`);
@@ -105,7 +106,6 @@ export function fetchCarts() {
 }
 
 export function createCart(values, callback){
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.post(`${ROOT_URL}carts${API_KEY}`, values)
@@ -121,7 +121,6 @@ export function createCart(values, callback){
 }
 
 export function submitCart(values, callback){
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.post(`${ROOT_URL}carts/submit${API_KEY}`, values)
@@ -137,7 +136,6 @@ export function submitCart(values, callback){
 }
 
 export function updateCart(id, values, callback){
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.put(`${ROOT_URL}carts/${id}${API_KEY}`, values)
@@ -153,7 +151,6 @@ export function updateCart(id, values, callback){
 }
 
 export function fetchCart() {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}carts${API_KEY}`);
@@ -164,7 +161,6 @@ export function fetchCart() {
 }
 
 export function getCart() {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}carts${API_KEY}`);
@@ -175,7 +171,6 @@ export function getCart() {
 }
 
 export function deleteCart(id, callback) {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.delete(`${ROOT_URL}carts/${id}${API_KEY}`)
@@ -187,7 +182,6 @@ export function deleteCart(id, callback) {
 }
 
 export function clearCart(callback) {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.delete(`${ROOT_URL}carts/clear-cart${API_KEY}`)
@@ -199,7 +193,6 @@ export function clearCart(callback) {
 }
 
 export function reportIndex() {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}reports${API_KEY}`);
@@ -210,7 +203,6 @@ export function reportIndex() {
 }
 
 export function fetchStores() {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}stores${API_KEY}`);
@@ -221,7 +213,6 @@ export function fetchStores() {
 }
 
 export function fetchStore(id) {
-  const ACCESS_TOKEN = deviceStorage.getStorage('user_token');
   const API_KEY = `?access-token=${ACCESS_TOKEN}`;
 
   const request = axios.get(`${ROOT_URL}stores/${id}${API_KEY}`);
