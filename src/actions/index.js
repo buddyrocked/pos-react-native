@@ -4,10 +4,8 @@ import deviceStorage from '../services/deviceStorage';
 import saveStorage from '../services/saveStorage';
 
 export const FETCH_HOME      = 'fetch_home';
-
 export const FETCH_PRODUCTS  = 'fetch_products';
 export const FETCH_PRODUCT   = 'fetch_product';
-
 export const FETCH_CARTS     = 'fetch_carts';
 export const CREATE_CART     = 'create_cart';
 export const UPDATE_CART     = 'update_cart';
@@ -16,14 +14,11 @@ export const FETCH_CART      = 'fetch_cart';
 export const GET_CART        = 'get_cart';
 export const DELETE_CART     = 'delete_cart';
 export const CLEAR_CART      = 'clear_cart';
-
 export const LOGIN           = 'login';
 export const LOGOUT          = 'logout';
-
-export const REPORT_INDEX     = 'report_index';
-
-export const FETCH_STORES     = 'fetch_stores';
-export const FETCH_STORE      = 'fetch_store';
+export const REPORT_INDEX    = 'report_index';
+export const FETCH_STORES    = 'fetch_stores';
+export const FETCH_STORE     = 'fetch_store';
 
 const ROOT_URL = `http://192.168.20.250/point-of-sales/backend/web/v1/`;
 //const ROOT_URL = `http://192.168.43.216/delucent/backend/web/v1/`;
@@ -31,7 +26,7 @@ const ROOT_URL = `http://192.168.20.250/point-of-sales/backend/web/v1/`;
 export function fetchHome() {
   const request = {
                     data : {
-                              title : 'Ini Title'
+                      title : 'Ini Title'
                     }
                   };
   return {
@@ -44,7 +39,7 @@ export const login = (values, callback) => async (dispatch, getState) => {
   try{
     let request = await axios.post(`${ROOT_URL}auth/login`, values);
 
-    axios.post(`${ROOT_URL}auth/login`, values)
+    await axios.post(`${ROOT_URL}auth/login`, values)
     .then((responseJson) => {
       if(responseJson.data.token == '') {
         Alert.alert(responseJson.data.message);
