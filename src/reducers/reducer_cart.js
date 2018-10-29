@@ -11,7 +11,6 @@ const defaultState = {
 export default function(state = defaultState, action){
   switch(action.type){
   case GET_CART:
-    //console.warn(action.payload.data);
     return Object.assign({}, state, action.payload.data);
   default:
     return state;

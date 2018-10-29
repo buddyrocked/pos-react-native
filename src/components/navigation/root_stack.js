@@ -14,6 +14,7 @@ import Cart from '../carts/show';
 import Login from '../auth/Login';
 import ReportIndex from '../report/index';
 import BranchIndex from '../branch/index';
+import CameraIndex from '../camera/index';
 import Chart from '../common/chart';
 
 import { fetchCarts, getCart, clearCart, logout } from '../../actions';
@@ -255,6 +256,31 @@ class RootStacks extends Component {
             ),
           }),
         },
+        CameraIndex : {
+          screen: CameraIndex,
+          navigationOptions: ({ navigation }) => ({
+            title: 'CAMERA',
+            headerStyle: {
+              backgroundColor: '#ff5c63',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: { textAlign:'center', alignSelf:'center',flex:1 },
+            headerMode : 'float',
+            headerRight: (
+              <View style={{ flex : 1, flexDirection : 'row'}}>
+                <View style={{ flex : 1 }}>
+                  <MaterialCommunityIcons
+                    style={{ marginRight : 10 }}
+                    name="cart-outline"
+                    size={24}
+                    color="#ffffff"
+                    onPress={() => navigation.navigate('CartIndex')}
+                  />
+                </View>
+              </View>
+            ),
+          }),
+        },
       },
       {
         initialRouteName : 'Home'
@@ -408,6 +434,25 @@ class RootStacks extends Component {
                   <View style={ styles.menuItemsTextContainer }>
                     <Text style={ styles.menuItemsText }>
                         { 'Branch' }
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex : 1 }}
+                accessible={ true }
+                accessibilityLabel={ 'Camera' }
+                onPress={ ()=> props.navigation.navigate('CameraIndex') }>
+                <View style={ styles.menuItems }>
+                  <View style={ styles.menuItemsIcon }>
+                    <MaterialCommunityIcons
+                      name="camera"
+                      size={24}
+                      color="#ff5c63" />
+                  </View>
+                  <View style={ styles.menuItemsTextContainer }>
+                    <Text style={ styles.menuItemsText }>
+                        { 'Camera' }
                     </Text>
                   </View>
                 </View>

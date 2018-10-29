@@ -6,7 +6,6 @@ export default function(state = {}, action){
   case FETCH_PRODUCT:
     return { ...state, [action.payload.id] : action.payload };
   case FETCH_PRODUCTS:
-    //return action.payload.data;
     return Object.assign({}, state, action.payload.data);
   default:
     return state;
